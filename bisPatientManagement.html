@@ -6,44 +6,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sorontil - Client Services</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get all "navbar-burger" elements
+      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+      // Check if there are any navbar burgers
+      if ($navbarBurgers.length > 0) {
+
+        // Add a click event on each of them
+        $navbarBurgers.forEach(el => {
+          el.addEventListener('click', () => {
+
+            // Get the target from the "data-target" attribute
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+
+            // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+            el.classList.toggle('is-active');
+            $target.classList.toggle('is-active');
+          });
+        });
+      }
+    });
+  </script>
 </head>
 
 <body>
   <nav class="navbar is-info" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item">
-      <span style="font-size: 1.5em">
-        <strong>Sorontil</strong>
-      </span>
-    </a>
-
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navigation-bar">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-
-  <div id="navigation-bar" class="navbar-menu">
-    <div class="navbar-start">
+    <div class="navbar-brand">
       <a class="navbar-item">
-        Home
+        <span style="font-size: 1.5em">
+          <strong>Sorontil</strong>
+        </span>
       </a>
 
-      <a class="navbar-item">
-        Reports
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navigation-bar">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
       </a>
     </div>
 
-    <div class="navbar-end">
-      <div class="navbar-item">
+    <div id="navigation-bar" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item">
+          Home
+        </a>
+
+        <a class="navbar-item">
+          Reports
+        </a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
           <a class="button" style="color: red">
             Log out
           </a>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
   <section class="section">
     <div class="columns is-mobile">
       <div class="column is-three-fifths-desktop is-offset-one-fifth-desktop">
@@ -56,9 +80,10 @@
             <textarea class="textarea" maxlength="160"></textarea>
           </div>
         </div>
-        
+
         <div class="field">
-          <label class="label">Client mobile phone numbers (no '+' or '-' or brackets or punctuation, separated by space, comma, or new-line):</label>
+          <label class="label">Client mobile phone numbers (no '+' or '-' or brackets or punctuation, separated by
+            space, comma, or new-line):</label>
           <div class="control">
             <textarea class="textarea"></textarea>
           </div>

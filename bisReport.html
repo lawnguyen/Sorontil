@@ -1,117 +1,231 @@
+<!DOCTYPE html>
 <html>
+
 <head>
-<title>SMS Report</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sorontil - Reports</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get all "navbar-burger" elements
+      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+      // Check if there are any navbar burgers
+      if ($navbarBurgers.length > 0) {
+
+        // Add a click event on each of them
+        $navbarBurgers.forEach(el => {
+          el.addEventListener('click', () => {
+
+            // Get the target from the "data-target" attribute
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+
+            // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+            el.classList.toggle('is-active');
+            $target.classList.toggle('is-active');
+          });
+        });
+      }
+    });
+  </script>
 </head>
+
 <body>
-    <form action="/authenticated/bisReport.do" method="post" enctype="multipart/form-data" >
-    
-    <br/><br/>
-    <table border="1">
-      <tbody>
-        <tr>
-          <td><b>ReportType:</b></td>
-          <td><text property="reportType" /> <errors property="reportType" /></td>
-         </tr>  
-         <tr>
-          <td><b>Report Order:</b></td>
-          <td>
-            <select property='reportOrder'>
-              <option value="byTime"/>
-              <option value="byName"/>
-            </select>
-          </td>
-         </tr>
-         <tr>
-          <td><b>Interval:</b></td>
-          <td>
-            <select property='interval'>
-              <option value="1">
-              <option value="2">
-              <option value="3">
-              <option value="4">
-              <option value="5">
-              <option value="6">
-              <option value="7">
-              <option value="8">
-              <option value="9">
-              <option value="10">
-              <option value="11">
-              <option value="12">
-              <option value="13">
-              <option value="14">
-              <option value="15">
-              <option value="16">
-              <option value="17">
-              <option value="18">
-              <option value="19">
-              <option value="20">
-              <option value="20">
-              <option value="21">
-              <option value="22">
-              <option value="23">
-              <option value="24">
-              <option value="25">
-              <option value="26">
-              <option value="27">
-              <option value="28">
-              <option value="29">
-              <option value="30">
-              <option value="30">
-              
-              
-            </select>
-          </td>
-         </tr> 
-         <tr>
-          <td><b>Frequency (day, week, month, year):</b></td>
-          <td>
-            <select property='intervalFrequency'>
-              <option value="day"/>
-              <option value="week"/>
-              <option value="month"/>
-              <option value="year"/>
-            </select>	
-          </td>
-         </tr>
-        </tbody>        
-    </table>
+  <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item">
+        <span style="font-size: 1.5em">
+          <strong>Sorontil</strong>
+        </span>
+      </a>
 
-    <submit>Refresh Report</submit><br/>
-		<br/><br/>
-		
-		<table border="1">
-			<tbody>
-				<%-- set the header --%>
-				<tr>
-					<td>reportTime</td>
-					<td>userID</td>
-					<td>reportInfo</td>
-					<td>reportID</td>
-					<td>reportNote</td>
-				</tr>
-				
-				<%-- check if reports exist and display message or iterate over reports  --%>
-				<logic:empty name="bisReportForm" property="reports">
-					<tr>
-						<td colspan="5">No SMS reports available</td>
-					</tr>
-				</logic:empty>
-				
-				<logic:notEmpty name="bisReportForm" property="reports">
-					<logic:iterate name="bisReportForm" property="reports" id="report">
-						<tr>
-							<td><bean:write name="report" property="reportTime" />
-							<td><bean:write name="report" property="userID" />
-							<td><bean:write name="report" property="reportInfo" />
-							<td><bean:write name="report" property="reportID" />
-							<td><bean:write name="report" property="reportNote" />
-						</tr>
-					</logic:iterate>
-				</logic:notEmpty>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navigation-bar">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
 
-			</tbody>
-		</table>
-	</form>
+    <div id="navigation-bar" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item">
+          Home
+        </a>
+
+        <a class="navbar-item">
+          Reports
+        </a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <a class="button" style="color: red">
+            Log out
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="table-container">
+      <table class="table is-striped">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>User ID</th>
+            <th>Info</th>
+            <th>Id</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>jason@lfd</td>
+            <td>38334532452345345</td>
+            <td>23</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>katherine@lfd</td>
+            <td>38</td>
+            <td>20</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>candance@lfd</td>
+            <td>38</td>
+            <td>19</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>19</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>jane@abc</td>
+            <td>38</td>
+            <td>19</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>jim@abc</td>
+            <td>38</td>
+            <td>18</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>16</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>16</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>14</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>12</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>11</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>12</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>12</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>10</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>11</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>11</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>9</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>9</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>9</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <th>Fri, 16 May 2015 05:50:06 GMT</th>
+            <td>john@abc</td>
+            <td>38</td>
+            <td>3</td>
+            <td>OK</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </body>
-</html>
 
+</html>
