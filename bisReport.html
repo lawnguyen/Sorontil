@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>SMS Report</title>
+</head>
+<body>
+    <form action="/authenticated/bisReport.do" method="post" enctype="multipart/form-data" >
+    
+    <br/><br/>
+    <table border="1">
+      <tbody>
+        <tr>
+          <td><b>ReportType:</b></td>
+          <td><text property="reportType" /> <errors property="reportType" /></td>
+         </tr>  
+         <tr>
+          <td><b>Report Order:</b></td>
+          <td>
+            <select property='reportOrder'>
+              <option value="byTime"/>
+              <option value="byName"/>
+            </select>
+          </td>
+         </tr>
+         <tr>
+          <td><b>Interval:</b></td>
+          <td>
+            <select property='interval'>
+              <option value="1">
+              <option value="2">
+              <option value="3">
+              <option value="4">
+              <option value="5">
+              <option value="6">
+              <option value="7">
+              <option value="8">
+              <option value="9">
+              <option value="10">
+              <option value="11">
+              <option value="12">
+              <option value="13">
+              <option value="14">
+              <option value="15">
+              <option value="16">
+              <option value="17">
+              <option value="18">
+              <option value="19">
+              <option value="20">
+              <option value="20">
+              <option value="21">
+              <option value="22">
+              <option value="23">
+              <option value="24">
+              <option value="25">
+              <option value="26">
+              <option value="27">
+              <option value="28">
+              <option value="29">
+              <option value="30">
+              <option value="30">
+              
+              
+            </select>
+          </td>
+         </tr> 
+         <tr>
+          <td><b>Frequency (day, week, month, year):</b></td>
+          <td>
+            <select property='intervalFrequency'>
+              <option value="day"/>
+              <option value="week"/>
+              <option value="month"/>
+              <option value="year"/>
+            </select>	
+          </td>
+         </tr>
+        </tbody>        
+    </table>
+
+    <submit>Refresh Report</submit><br/>
+		<br/><br/>
+		
+		<table border="1">
+			<tbody>
+				<%-- set the header --%>
+				<tr>
+					<td>reportTime</td>
+					<td>userID</td>
+					<td>reportInfo</td>
+					<td>reportID</td>
+					<td>reportNote</td>
+				</tr>
+				
+				<%-- check if reports exist and display message or iterate over reports  --%>
+				<logic:empty name="bisReportForm" property="reports">
+					<tr>
+						<td colspan="5">No SMS reports available</td>
+					</tr>
+				</logic:empty>
+				
+				<logic:notEmpty name="bisReportForm" property="reports">
+					<logic:iterate name="bisReportForm" property="reports" id="report">
+						<tr>
+							<td><bean:write name="report" property="reportTime" />
+							<td><bean:write name="report" property="userID" />
+							<td><bean:write name="report" property="reportInfo" />
+							<td><bean:write name="report" property="reportID" />
+							<td><bean:write name="report" property="reportNote" />
+						</tr>
+					</logic:iterate>
+				</logic:notEmpty>
+
+			</tbody>
+		</table>
+	</form>
+</body>
+</html>
+
