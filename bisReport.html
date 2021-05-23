@@ -6,7 +6,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sorontil - Reports</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-  <script>
+  <script async>
+    function populateTable() {
+      data = [
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"],
+        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "4031234567", 1, "Succeeded"]
+      ];
+
+      const tableBody = document.getElementById('table-body');
+      let rowNum = 0;
+      data.forEach(x => {
+        let row = tableBody.insertRow(rowNum);
+        let cellNum = 0;
+        x.forEach(y => {
+          let cell = row.insertCell(cellNum);
+          cell.innerHTML = y;
+          cellNum++;
+        });
+        rowNum++;
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // Get all "navbar-burger" elements
       const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
@@ -28,6 +61,8 @@
           });
         });
       }
+
+      populateTable();
     });
   </script>
 </head>
@@ -81,147 +116,7 @@
             <th>Status</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>jason@lfd</td>
-            <td>38334532452345345</td>
-            <td>23</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>katherine@lfd</td>
-            <td>38</td>
-            <td>20</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>candance@lfd</td>
-            <td>38</td>
-            <td>19</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>19</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>jane@abc</td>
-            <td>38</td>
-            <td>19</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>jim@abc</td>
-            <td>38</td>
-            <td>18</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>16</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>16</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>14</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>12</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>11</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>12</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>12</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>10</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>11</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>11</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>9</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>9</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>9</td>
-            <td>OK</td>
-          </tr>
-          <tr>
-            <th>Fri, 16 May 2015 05:50:06 GMT</th>
-            <td>john@abc</td>
-            <td>38</td>
-            <td>3</td>
-            <td>OK</td>
-          </tr>
+        <tbody id="table-body">
         </tbody>
       </table>
     </div>
