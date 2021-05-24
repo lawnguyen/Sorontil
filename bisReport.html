@@ -34,6 +34,12 @@
         x.forEach(y => {
           let cell = row.insertCell(cellNum);
           cell.innerHTML = y;
+          if (y === 'Succeeded') {
+            cell.style.color = 'green';
+          }
+          if (y === 'Failed') {
+            cell.style.color = 'red';
+          }
           cellNum++;
         });
         rowNum++;
