@@ -20,8 +20,11 @@
 
     function sortBy(id) {
       if (id !== currentSortById) {
+        const selectedElement = document.getElementById(id);
         document.getElementById(currentSortById).classList.remove('is-active');
-        document.getElementById(id).classList.add('is-active');
+        selectedElement.classList.add('is-active');
+        document.getElementById('current-sort-by').innerText = selectedElement.innerText;
+        toggleSort();
         currentSortById = id;
       }
     }
@@ -135,7 +138,7 @@
         <div id="sort-button" class="dropdown">
           <div class="dropdown-trigger">
             <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" onclick="toggleSort()">
-              Sort by:<span><strong>&nbsp Time</strong></span>
+              Sort by: &nbsp<strong> <span id="current-sort-by">Time</span></strong>
             </button>
           </div>
           <div class="dropdown-menu" id="dropdown-menu" role="menu">
