@@ -7,9 +7,12 @@
   <title>Sorontil - Reports</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
   <script async>
+
+    //#region sorting
     let currentSortById = 'sort-by-time';
 
     function toggleSort() {
+      // TODO: close sort dropdown when clicking elsewhere in the page
       const sortButton = document.getElementById('sort-button');
       if (sortButton.classList.contains('is-active')) {
         sortButton.classList.remove('is-active');
@@ -85,8 +88,11 @@
       }
       return false;
     }
+    //#endregion
 
+    //#region initialization
     function populateTable() {
+      // TODO: Get this data from the server and convert into a user-friendly format
       data = [
         ["2021-05-31 12:45:58.929", "jason@lfd", "+14031234567", "SMS1", "Succeeded"],
         ["2021-05-31 01:45:58.929", "katherine@lfd", "+14031234567", "SMS2", "Succeeded"],
@@ -151,6 +157,7 @@
 
       populateTable();
     });
+    //#endregion
   </script>
 </head>
 
