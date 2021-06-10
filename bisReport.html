@@ -32,8 +32,13 @@
 
     function sortTable(id) {
       let table, rows, switching, i, x, y, shouldSwitch, columnIndex;
+      const columnToIndexMap = {
+        'sort-by-time': 0,
+        'sort-by-users': 1,
+        'sort-by-status': 4
+      };
       table = document.getElementById('table-body');
-      columnIndex = id === 'sort-by-time' ? 0 : 1;
+      columnIndex = columnToIndexMap[id];
       switching = true;
       // Make a loop that will continue until no switching has been done
       while (switching) {
@@ -60,7 +65,7 @@
     }
 
     function shouldSwitchRows(id, x, y) {
-      if (id === 'sort-by-users') {
+      if (id === 'sort-by-users' || id === 'sort-by-status') {
         if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
           return true;
         }
@@ -200,6 +205,9 @@
               </a>
               <a id="sort-by-users" class="dropdown-item" onclick="sortBy(this.id)">
                 User Id
+              </a>
+              <a id="sort-by-status" class="dropdown-item" onclick="sortBy(this.id)">
+                Status
               </a>
             </div>
           </div>
