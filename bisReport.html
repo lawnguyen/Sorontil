@@ -21,11 +21,17 @@
     function sortBy(id) {
       if (id !== currentSortById) {
         const selectedElement = document.getElementById(id);
-        document.getElementById(currentSortById).classList.remove('is-active');
         selectedElement.classList.add('is-active');
+        document.getElementById(currentSortById).classList.remove('is-active');
         document.getElementById('current-sort-by').innerText = selectedElement.innerText;
         toggleSort();
         currentSortById = id;
+      }
+      if (id === 'sort-by-time') {
+        
+      }
+      if(id === 'sort-by-users') {
+
       }
     }
 
