@@ -27,31 +27,80 @@
         toggleSort();
         currentSortById = id;
       }
-      if (id === 'sort-by-time') {
-        
-      }
-      if(id === 'sort-by-users') {
+      sortTable(id);
+    }
 
+    function sortTable(id) {
+      let table, rows, switching, i, x, y, shouldSwitch, columnIndex;
+      table = document.getElementById('table-body');
+      columnIndex = id === 'sort-by-time' ? 0 : 1;
+      switching = true;
+      /*Make a loop that will continue until
+      no switching has been done:*/
+      while (switching) {
+        switching = false;
+        rows = table.rows;
+        // Loop through all table rows
+        for (i = 0; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          /*Get the two elements you want to compare,
+          one from current row and one from the next:*/
+          x = rows[i].getElementsByTagName("TD")[columnIndex];
+          y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+          //check if the two rows should switch place:
+          if (shouldSwitchRows(id, x, y)) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          /*If a switch has been marked, make the switch
+          and mark that a switch has been done:*/
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
       }
+    }
+
+    function shouldSwitchRows(id, x, y) {
+      if (id === 'sort-by-users') {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          return true;
+        }
+      }
+      if (id === 'sort-by-time') {
+        // format from server is 2021-05-31 12:45:58.929, timezone unknown
+        // TODO: display in format Fri, 16 May 2015 05:40:02 GMT
+        let regex = /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{3})/;
+        let xMatch = regex.exec(x.innerHTML);
+        let yMatch = regex.exec(y.innerHTML);
+        let xDate = new Date(xMatch[1], xMatch[2] - 1, xMatch[3], xMatch[4], xMatch[5], xMatch[6], xMatch[7]);
+        let yDate = new Date(yMatch[1], yMatch[2] - 1, yMatch[3], yMatch[4], yMatch[5], yMatch[6], yMatch[7]);
+
+        if (xDate > yDate) {
+          return true;
+        }
+      }
+      return false;
     }
 
     function populateTable() {
       data = [
-        ["Fri, 16 May 2015 05:50:06 GMT", "jason@lfd", "+14031234567", "SMS1", "Succeeded"],
-        ["Fri, 16 May 2015 05:49:06 GMT", "katherine@lfd", "+14031234567", "SMS2", "Succeeded"],
-        ["Fri, 16 May 2015 05:48:06 GMT", "Candace@lfd", "+14031234567", "SMS3", "Succeeded"],
-        ["Fri, 16 May 2015 05:47:06 GMT", "John@lfd", "+14031234567", "SMS4", "Succeeded"],
-        ["Fri, 16 May 2015 05:46:06 GMT", "Jane@lfd", "+14031234567", "SMS5", "Succeeded"],
-        ["Fri, 16 May 2015 05:45:06 GMT", "Michael@lfd", "+14031234567", "SMS6", "Succeeded"],
-        ["Fri, 16 May 2015 05:44:06 GMT", "Jim@lfd", "+14031234567", "SMS7", "Succeeded"],
-        ["Fri, 16 May 2015 05:43:06 GMT", "Joe@lfd", "+14031234567", "SMS8", "Succeeded"],
-        ["Fri, 16 May 2015 05:42:06 GMT", "Paul@lfd", "+14031234567", "SMS9", "Succeeded"],
-        ["Fri, 16 May 2015 05:41:06 GMT", "Bob@lfd", "+14031234567", "SMS10", "Succeeded"],
-        ["Fri, 16 May 2015 05:40:06 GMT", "Alice@lfd", "+14031234567", "SMS11", "Failed"],
-        ["Fri, 16 May 2015 05:40:05 GMT", "Lisa@lfd", "+14031234567", "SMS12", "Succeeded"],
-        ["Fri, 16 May 2015 05:40:04 GMT", "james@lfd", "+14031234567", "SMS13", "Succeeded"],
-        ["Fri, 16 May 2015 05:40:03 GMT", "tim@lfd", "+14031234567", "SMS14", "Succeeded"],
-        ["Fri, 16 May 2015 05:40:02 GMT", "alexander@lfd", "+14031234567", "SMS15", "Succeeded"]
+        ["2021-05-31 12:45:58.929", "jason@lfd", "+14031234567", "SMS1", "Succeeded"],
+        ["2021-05-31 01:45:58.929", "katherine@lfd", "+14031234567", "SMS2", "Succeeded"],
+        ["2021-05-31 11:45:58.929", "Candace@lfd", "+14031234567", "SMS3", "Succeeded"],
+        ["2021-05-31 03:45:58.929", "John@lfd", "+14031234567", "SMS4", "Succeeded"],
+        ["2021-05-31 24:45:58.929", "Jane@lfd", "+14031234567", "SMS5", "Succeeded"],
+        ["2021-05-31 15:45:58.929", "Michael@lfd", "+14031234567", "SMS6", "Succeeded"],
+        ["2021-05-31 16:45:58.929", "Jim@lfd", "+14031234567", "SMS7", "Succeeded"],
+        ["2021-05-31 12:35:58.929", "Joe@lfd", "+14031234567", "SMS8", "Succeeded"],
+        ["2021-05-31 12:25:58.929", "Paul@lfd", "+14031234567", "SMS9", "Succeeded"],
+        ["2021-05-31 12:46:58.929", "Bob@lfd", "+14031234567", "SMS10", "Succeeded"],
+        ["2021-05-31 12:21:58.929", "Alice@lfd", "+14031234567", "SMS11", "Failed"],
+        ["2021-05-31 12:45:04.929", "Lisa@lfd", "+14031234567", "SMS12", "Succeeded"],
+        ["2021-05-31 12:45:12.929", "james@lfd", "+14031234567", "SMS13", "Succeeded"],
+        ["2021-09-31 12:45:58.929", "tim@lfd", "+14031234567", "SMS14", "Succeeded"],
+        ["2021-07-31 12:45:58.929", "alexander@lfd", "+14031234567", "SMS15", "Succeeded"]
       ];
 
       const tableBody = document.getElementById('table-body');
@@ -144,7 +193,7 @@
         <div id="sort-button" class="dropdown">
           <div class="dropdown-trigger">
             <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" onclick="toggleSort()">
-              Sort by: &nbsp<strong> <span id="current-sort-by">Time</span></strong>
+              Sort by: &nbsp<strong><span id="current-sort-by">Time</span></strong>
             </button>
           </div>
           <div class="dropdown-menu" id="dropdown-menu" role="menu">
