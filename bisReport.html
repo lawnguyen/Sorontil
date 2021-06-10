@@ -8,6 +8,20 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
   <script async>
 
+    //#region filtering
+    let currentFilterById;
+
+    function toggleFilter() {
+      // TODO: close sort dropdown when clicking elsewhere in the page
+      const filterButton = document.getElementById('filter-button');
+      if (filterButton.classList.contains('is-active')) {
+        filterButton.classList.remove('is-active');
+      } else {
+        filterButton.classList.add('is-active');
+      }
+    }
+    //#endregion
+
     //#region sorting
     let currentSortById = 'sort-by-time';
 
@@ -217,6 +231,32 @@
               </a>
               <a id="sort-by-status" class="dropdown-item" onclick="sortBy(this.id)">
                 Status
+              </a>
+            </div>
+          </div>
+        </div>
+        <div id="filter-button" class="dropdown">
+          <div class="dropdown-trigger">
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" onclick="toggleFilter()">
+              View last: &nbsp<strong><span id="current-sort-by">1 hour</span></strong>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-content">
+              <a id="filter-1-hour" class="dropdown-item is-active" onclick="filterBy(this.id)">
+                Last 1 hour
+              </a>
+              <a id="filter-24-hour" class="dropdown-item" onclick="filterBy(this.id)">
+                Last 24 hours
+              </a>
+              <a id="filter-48-hour" class="dropdown-item" onclick="filterBy(this.id)">
+                Last 48 hours
+              </a>
+              <a id="filter-7-days" class="dropdown-item" onclick="filterBy(this.id)">
+                Last 7 days
+              </a>
+              <a id="filter-30-days" class="dropdown-item" onclick="filterBy(this.id)">
+                Last 30 days
               </a>
             </div>
           </div>
