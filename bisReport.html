@@ -28,13 +28,14 @@
         const selectedElement = document.getElementById(operationId);
         selectedElement.classList.add('is-active');
         document.getElementById(currentOperationId).classList.remove('is-active');
-        document.getElementById('current-sort-by').innerText = selectedElement.innerText;
 
         if (operation === 'sort') {
+          document.getElementById('current-sort-by').innerText = selectedElement.innerText;
           toggleDropdown('sort-button');
           currentSortById = operationId;
           sortTable(operationId);
         } else if (operation === 'filter') {
+          document.getElementById('current-filter-by').innerText = selectedElement.innerText;
           toggleDropdown('filter-button');
           currentFilterById = operationId;
           filterTable(operationId);
@@ -44,8 +45,53 @@
     //#endregion
 
     //#region filtering
-    function filterTable() {
+    function filterTable(operationId) {
+      let filter, table, rows, td, textValue;
+      const selectedElement = document.getElementById(operationId);
+      table = document.getElementById("table-body");
+      rows = table.getElementsByTagName("TR");
 
+      // Loop through all table rows, and hide those who don't match the search query
+      for (let i = 0; i < rows.length; i++) {
+        dateValue = rows[i].getElementsByTagName("TD")[0];
+        if (dateValue) {
+          textValue = dateValue.textContent || dateValue.innerText;
+          const regex = /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{3})/;
+          const match = regex.exec(textValue);
+          const date = new Date(match[1], match[2] - 1, match[3], match[4], match[5], match[6], match[7]);
+          
+          if (shouldFilterRow(operationId, date)) {
+            rows[i].style.display = "none";
+          } else {
+            rows[i].style.display = "";
+          }
+        }
+      }
+    }
+
+    function shouldFilterRow(operationId, date) {
+      // TODO: convert all dates to UTC or ISO before comparing, need to confirm timezones from server
+      let shouldFilter = false;
+      const currentDate = Date.now();
+      const rowDate = date.valueOf();
+      switch (operationId) {
+        case 'filter-1-hour':
+          shouldFilter = rowDate < currentDate - 3600000  // number of ms in one hour
+          break;
+        case 'filter-24-hour':
+          shouldFilter = rowDate < currentDate - 86400000  // number of ms in 24 hr
+          break;
+        case 'filter-48-hour':
+          shouldFilter = rowDate < currentDate - 172800000  // number of ms in 48 hr
+          break;
+        case 'filter-7-days':
+          shouldFilter = rowDate < currentDate - 604800000  // number of ms in 7 days
+          break;
+        case 'filter-30-days':
+          shouldFilter = rowDate < currentDate - 2592000000  // number of ms in 30 days
+          break;
+      }
+      return shouldFilter;
     }
 
     //#endregion
@@ -112,10 +158,10 @@
     function populateTable() {
       // TODO: Get this data from the server and convert into a user-friendly format
       data = [
-        ["2021-05-31 12:45:58.929", "jason@lfd", "+14031234567", "SMS1", "Succeeded"],
-        ["2021-05-31 01:45:58.929", "katherine@lfd", "+14031234567", "SMS2", "Succeeded"],
-        ["2021-05-31 11:45:58.929", "Candace@lfd", "+14031234567", "SMS3", "Succeeded"],
-        ["2021-05-31 03:45:58.929", "John@lfd", "+14031234567", "SMS4", "Succeeded"],
+        ["2021-06-10 23:45:58.929", "jason@lfd", "+14031234567", "SMS1", "Succeeded"],
+        ["2021-06-10 01:45:58.929", "katherine@lfd", "+14031234567", "SMS2", "Succeeded"],
+        ["2021-06-07 11:45:58.929", "Candace@lfd", "+14031234567", "SMS3", "Succeeded"],
+        ["2021-06-09 03:45:58.929", "John@lfd", "+14031234567", "SMS4", "Succeeded"],
         ["2021-05-31 24:45:58.929", "Jane@lfd", "+14031234567", "SMS5", "Succeeded"],
         ["2021-05-31 15:45:58.929", "Michael@lfd", "+14031234567", "SMS6", "Succeeded"],
         ["2021-05-31 16:45:58.929", "Jim@lfd", "+14031234567", "SMS7", "Succeeded"],
@@ -125,8 +171,8 @@
         ["2021-05-31 12:21:58.929", "Alice@lfd", "+14031234567", "SMS11", "Failed"],
         ["2021-05-31 12:45:04.929", "Lisa@lfd", "+14031234567", "SMS12", "Succeeded"],
         ["2021-05-31 12:45:12.929", "james@lfd", "+14031234567", "SMS13", "Succeeded"],
-        ["2021-09-31 12:45:58.929", "tim@lfd", "+14031234567", "SMS14", "Succeeded"],
-        ["2021-07-31 12:45:58.929", "alexander@lfd", "+14031234567", "SMS15", "Succeeded"]
+        ["2021-04-31 12:45:58.929", "tim@lfd", "+14031234567", "SMS14", "Succeeded"],
+        ["2021-03-31 12:45:58.929", "alexander@lfd", "+14031234567", "SMS15", "Succeeded"]
       ];
 
       const tableBody = document.getElementById('table-body');
@@ -244,7 +290,7 @@
           <div class="dropdown-trigger">
             <button class="button" aria-haspopup="true" aria-controls="dropdown-menu"
               onclick="toggleDropdown('filter-button')">
-              View last: &nbsp<strong><span id="current-sort-by">1 hour</span></strong>
+              View last: &nbsp<strong><span id="current-filter-by">1 hour</span></strong>
             </button>
           </div>
           <div class="dropdown-menu" id="dropdown-menu" role="menu">
