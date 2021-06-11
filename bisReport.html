@@ -13,13 +13,20 @@
 
     //#region dropdown
     function toggleDropdown(dropdownButtonId) {
-      // TODO: close sort dropdown when clicking elsewhere in the page
       const dropdown = document.getElementById(dropdownButtonId);
       if (dropdown.classList.contains('is-active')) {
         dropdown.classList.remove('is-active');
       } else {
+        closeAllDropdowns();
         dropdown.classList.add('is-active');
       }
+    }
+
+    function closeAllDropdowns() {
+      // TODO: close sort dropdown when clicking elsewhere in the page
+      document.querySelectorAll(".dropdown.is-active").forEach(elem => {
+        elem.classList.remove('is-active');
+      });
     }
 
     function sortOrFilter(operationId, operation) {
@@ -93,7 +100,6 @@
       }
       return shouldFilter;
     }
-
     //#endregion
 
     //#region sorting
