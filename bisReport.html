@@ -8,46 +8,50 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
   <script async>
 
-    //#region filtering
-    let currentFilterById;
+    let currentFilterById = 'filter-1-hour';
+    let currentSortById = 'sort-by-time';
 
-    function toggleFilter() {
+    //#region dropdown
+    function toggleDropdown(dropdownButtonId) {
       // TODO: close sort dropdown when clicking elsewhere in the page
-      const filterButton = document.getElementById('filter-button');
-      if (filterButton.classList.contains('is-active')) {
-        filterButton.classList.remove('is-active');
+      const dropdown = document.getElementById(dropdownButtonId);
+      if (dropdown.classList.contains('is-active')) {
+        dropdown.classList.remove('is-active');
       } else {
-        filterButton.classList.add('is-active');
+        dropdown.classList.add('is-active');
+      }
+    }
+
+    function sortOrFilter(operationId, operation) {
+      const currentOperationId = operation === 'sort' ? currentSortById : currentFilterById;
+      if (operationId !== currentOperationId) {
+        const selectedElement = document.getElementById(operationId);
+        selectedElement.classList.add('is-active');
+        document.getElementById(currentOperationId).classList.remove('is-active');
+        document.getElementById('current-sort-by').innerText = selectedElement.innerText;
+
+        if (operation === 'sort') {
+          toggleDropdown('sort-button');
+          currentSortById = operationId;
+          sortTable(operationId);
+        } else if (operation === 'filter') {
+          toggleDropdown('filter-button');
+          currentFilterById = operationId;
+          filterTable(operationId);
+        }
       }
     }
     //#endregion
 
+    //#region filtering
+    function filterTable() {
+
+    }
+
+    //#endregion
+
     //#region sorting
-    let currentSortById = 'sort-by-time';
-
-    function toggleSort() {
-      // TODO: close sort dropdown when clicking elsewhere in the page
-      const sortButton = document.getElementById('sort-button');
-      if (sortButton.classList.contains('is-active')) {
-        sortButton.classList.remove('is-active');
-      } else {
-        sortButton.classList.add('is-active');
-      }
-    }
-
-    function sortBy(id) {
-      if (id !== currentSortById) {
-        const selectedElement = document.getElementById(id);
-        selectedElement.classList.add('is-active');
-        document.getElementById(currentSortById).classList.remove('is-active');
-        document.getElementById('current-sort-by').innerText = selectedElement.innerText;
-        toggleSort();
-        currentSortById = id;
-      }
-      sortTable(id);
-    }
-
-    function sortTable(id) {
+    function sortTable(operationId) {
       let table, rows, switching, i, x, y, shouldSwitch, columnIndex;
       const columnToIndexMap = {
         'sort-by-time': 0,
@@ -55,7 +59,7 @@
         'sort-by-status': 4
       };
       table = document.getElementById('table-body');
-      columnIndex = columnToIndexMap[id];
+      columnIndex = columnToIndexMap[operationId];
       switching = true;
       // Make a loop that will continue until no switching has been done
       while (switching) {
@@ -68,7 +72,7 @@
           x = rows[i].getElementsByTagName("TD")[columnIndex];
           y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
           // Check if the two rows should switch place:
-          if (shouldSwitchRows(id, x, y)) {
+          if (shouldSwitchRows(operationId, x, y)) {
             shouldSwitch = true;
             break;
           }
@@ -81,13 +85,13 @@
       }
     }
 
-    function shouldSwitchRows(id, x, y) {
-      if (id === 'sort-by-users' || id === 'sort-by-status') {
+    function shouldSwitchRows(operationId, x, y) {
+      if (operationId === 'sort-by-users' || operationId === 'sort-by-status') {
         if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
           return true;
         }
       }
-      if (id === 'sort-by-time') {
+      if (operationId === 'sort-by-time') {
         // format from server is 2021-05-31 12:45:58.929, timezone unknown
         // TODO: display in format Fri, 16 May 2015 05:40:02 GMT
         let regex = /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{3})/;
@@ -217,19 +221,20 @@
       <div class="column">
         <div id="sort-button" class="dropdown">
           <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" onclick="toggleSort()">
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu"
+              onclick="toggleDropdown('sort-button')">
               Sort by: &nbsp<strong><span id="current-sort-by">Time</span></strong>
             </button>
           </div>
           <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-              <a id="sort-by-time" class="dropdown-item is-active" onclick="sortBy(this.id)">
+              <a id="sort-by-time" class="dropdown-item is-active" onclick="sortOrFilter(this.id, 'sort')">
                 Time
               </a>
-              <a id="sort-by-users" class="dropdown-item" onclick="sortBy(this.id)">
+              <a id="sort-by-users" class="dropdown-item" onclick="sortOrFilter(this.id, 'sort')">
                 User Id
               </a>
-              <a id="sort-by-status" class="dropdown-item" onclick="sortBy(this.id)">
+              <a id="sort-by-status" class="dropdown-item" onclick="sortOrFilter(this.id, 'sort')">
                 Status
               </a>
             </div>
@@ -237,25 +242,26 @@
         </div>
         <div id="filter-button" class="dropdown">
           <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" onclick="toggleFilter()">
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu"
+              onclick="toggleDropdown('filter-button')">
               View last: &nbsp<strong><span id="current-sort-by">1 hour</span></strong>
             </button>
           </div>
           <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-              <a id="filter-1-hour" class="dropdown-item is-active" onclick="filterBy(this.id)">
+              <a id="filter-1-hour" class="dropdown-item is-active" onclick="sortOrFilter(this.id, 'filter')">
                 Last 1 hour
               </a>
-              <a id="filter-24-hour" class="dropdown-item" onclick="filterBy(this.id)">
+              <a id="filter-24-hour" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
                 Last 24 hours
               </a>
-              <a id="filter-48-hour" class="dropdown-item" onclick="filterBy(this.id)">
+              <a id="filter-48-hour" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
                 Last 48 hours
               </a>
-              <a id="filter-7-days" class="dropdown-item" onclick="filterBy(this.id)">
+              <a id="filter-7-days" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
                 Last 7 days
               </a>
-              <a id="filter-30-days" class="dropdown-item" onclick="filterBy(this.id)">
+              <a id="filter-30-days" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
                 Last 30 days
               </a>
             </div>
