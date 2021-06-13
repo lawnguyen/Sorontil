@@ -98,6 +98,9 @@
         case 'filter-30-days':
           shouldFilter = rowDate < currentDate - 2592000000  // number of ms in 30 days
           break;
+        case 'filter-none':
+          shouldFilter = false;
+          break;
       }
       return shouldFilter;
     }
@@ -356,6 +359,9 @@
               </a>
               <a id="filter-30-days" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
                 Last 30 days
+              </a>
+              <a id="filter-none" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
+                All
               </a>
             </div>
           </div>
