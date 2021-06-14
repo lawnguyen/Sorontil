@@ -7,6 +7,8 @@
   <title>Sorontil - Client Services</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
   <script async>
+
+    //#region initialization
     document.addEventListener('DOMContentLoaded', () => {
       // Get all "navbar-burger" elements
       const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
@@ -28,7 +30,32 @@
           });
         });
       }
+
+      // Character counter initialization
+      function setCharacterCounter(currentLength, maxLength) {
+        const charCounter = document.getElementById('character-counter');
+        if (currentLength == maxLength) {
+          charCounter.style.color = 'red';
+          charCounter.innerHTML = `Maximum reached! ${currentLength}/${maxLength}`;
+        } else {
+          charCounter.style.color = 'green';
+          charCounter.innerHTML = `${currentLength}/${maxLength}`;
+        }
+      }
+
+      const messageBody = document.getElementById('message-body');
+      const messageMaxLength = messageBody.getAttribute('maxlength');
+      messageBody.addEventListener('input', (e) => {
+        const target = e.target;
+
+        // Count the current number of characters
+        const currentLength = target.value.length;
+        setCharacterCounter(currentLength, messageMaxLength);
+      });
+
+      setCharacterCounter(0, messageMaxLength)
     });
+    //#endregion
   </script>
 </head>
 
@@ -80,9 +107,10 @@
           <strong>LE FAMILY DENTAL</strong>
         </h1>
         <div class="field">
-          <label class="label">Message body [80 x 4] (160 characters or less, including new-line/s):</label>
+          <label class="label">Message body [80 x 4] (max. 160 characters):</label>
           <div class="control">
-            <textarea class="textarea" maxlength="160"></textarea>
+            <textarea id="message-body" class="textarea" maxlength="160"></textarea>
+            <div style="display: flex; justify-content: flex-end" id="character-counter"></div>
           </div>
         </div>
 
