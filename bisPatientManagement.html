@@ -62,7 +62,12 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <a class="button" style="color: red">
-            Log out
+            <span>Log out &nbsp</span>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="red">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+            </svg>
           </a>
         </div>
       </div>
@@ -89,12 +94,20 @@
           </div>
         </div>
 
-        <div class="field is-grouped">
+        <div class="field is-grouped" style="display: flex; justify-content: space-between;">
           <div class="control">
-            <button class="button is-info">Send</button>
+            <button class="button is-info">
+              <span>Send &nbsp</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+              </svg>
+            </button>
           </div>
-          <div class="control">
-            <button class="button is-info is-light">Clear</button>
+          <div class="control" style="display: flex; justify-content: flex-end">
+            <button class="button is-info is-light">
+              <span>Clear all</span>
+            </button>
           </div>
         </div>
       </div>
