@@ -8,6 +8,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
   <script async>
 
+    //#region send sms
+    function sendSMS() {
+      // TODO: send sms function here
+    }
+    //#endregion
+
     //#region initialization
     document.addEventListener('DOMContentLoaded', () => {
       // Get all "navbar-burger" elements
@@ -124,7 +130,7 @@
 
         <div class="field is-grouped" style="display: flex; justify-content: space-between;">
           <div class="control">
-            <button class="button is-info">
+            <button class="button is-info" onclick="sendSMS()">
               <span>Send &nbsp</span>
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff">
                 <path d="M0 0h24v24H0z" fill="none" />
