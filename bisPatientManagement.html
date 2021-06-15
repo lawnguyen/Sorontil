@@ -14,6 +14,25 @@
     }
     //#endregion
 
+    //#region character counter
+    function setCharacterCounter(currentLength, maxLength) {
+      const charCounter = document.getElementById('character-counter');
+      if (currentLength == maxLength) {
+        charCounter.style.color = 'red';
+        charCounter.innerHTML = `Maximum reached! ${currentLength}/${maxLength}`;
+      } else {
+        charCounter.style.color = 'green';
+        charCounter.innerHTML = `${currentLength}/${maxLength}`;
+      }
+    }
+    //#endregion
+
+    //#region phone numbers
+    function processPhoneNumbers() {
+
+    }
+    //#endregion
+
     //#region initialization
     document.addEventListener('DOMContentLoaded', () => {
       // Get all "navbar-burger" elements
@@ -37,18 +56,9 @@
         });
       }
 
-      // Character counter initialization
-      function setCharacterCounter(currentLength, maxLength) {
-        const charCounter = document.getElementById('character-counter');
-        if (currentLength == maxLength) {
-          charCounter.style.color = 'red';
-          charCounter.innerHTML = `Maximum reached! ${currentLength}/${maxLength}`;
-        } else {
-          charCounter.style.color = 'green';
-          charCounter.innerHTML = `${currentLength}/${maxLength}`;
-        }
-      }
+      // TODO: Get company name from server and set as header
 
+      // Character counter event listener
       const messageBody = document.getElementById('message-body');
       const messageMaxLength = messageBody.getAttribute('maxlength');
       messageBody.addEventListener('input', (e) => {
@@ -59,7 +69,13 @@
         setCharacterCounter(currentLength, messageMaxLength);
       });
 
-      setCharacterCounter(0, messageMaxLength)
+      setCharacterCounter(0, messageMaxLength);
+
+      // Phone numbers event listener
+      const phoneNumbers = document.getElementById('phone-numbers');
+      phoneNumbers.addEventListener('input', (e) => {
+        processPhoneNumbers();
+      });
     });
     //#endregion
   </script>
@@ -121,10 +137,33 @@
         </div>
 
         <div class="field">
-          <label class="label">Client mobile phone numbers (no '+' or '-' or brackets or punctuation, separated by
-            space, comma, or new-line):</label>
+          <label class="label">Client mobile phone numbers:</label>
           <div class="control">
-            <input class="input is-info" type="text">
+            <input id="phone-numbers" class="input is-info" type="text"
+              placeholder="Enter numbers one-by-one or separated by space, comma, or new-line">
+          </div>
+        </div>
+
+        <div class="field is-grouped is-grouped-multiline">
+          <div class="control">
+            <div class="tags has-addons">
+              <a class="tag is-info">(403) 123-4567</a>
+              <a class="tag is-delete"></a>
+            </div>
+          </div>
+
+          <div class="control">
+            <div class="tags has-addons">
+              <a class="tag is-info">(403) 123-4568</a>
+              <a class="tag is-delete"></a>
+            </div>
+          </div>
+
+          <div class="control">
+            <div class="tags has-addons">
+              <a class="tag is-info">(403) 123-4569</a>
+              <a class="tag is-delete"></a>
+            </div>
           </div>
         </div>
 
