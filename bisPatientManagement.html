@@ -49,9 +49,13 @@
     }
 
     function createNumberTagElement(number) {
-      return "<div class='control'><div class='tags has-addons'><span class='tag'>" +
+      return "<div onclick='remove(this)' class='control'><div class='tags has-addons'><span class='tag'>" +
         number +
         "</span><span class='tag is-delete is-danger is-light'></span></div></div>";
+    }
+
+    function remove(el) {
+      el.remove();
     }
     //#endregion
 
