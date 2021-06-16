@@ -27,9 +27,31 @@
     }
     //#endregion
 
-    //#region phone numbers
-    function processPhoneNumbers() {
+    //#region phone number validation
+    function processPhoneNumbers(target) {
+      const number = target.value;
+      const numberUnformatted = number.replace(/\D/g, "");
 
+      // if most recently inputted character is a comma or whitespace
+      if (!number[number.length - 1].trim().length || number[number.length - 1] === ',') {
+        if ((numberUnformatted.length === 11 && numberUnformatted[0] === '1') ||
+          (numberUnformatted.length === 10 && numberUnformatted[0] !== '1')) {
+          const numberTag = createNumberTagElement(number.trim().replace(',', ''));
+          document.getElementById('phone-numbers-list').insertAdjacentHTML('afterbegin', numberTag);
+
+          // Clear the input field
+          document.getElementById('phone-numbers').value = '';
+          return;
+        }
+        console.log('invalid');
+        return;
+      }
+    }
+
+    function createNumberTagElement(number) {
+      return "<div class='control'><div class='tags has-addons'><span class='tag'>" +
+        number +
+        "</span><span class='tag is-delete is-danger is-light'></span></div></div>";
     }
     //#endregion
 
@@ -74,7 +96,7 @@
       // Phone numbers event listener
       const phoneNumbers = document.getElementById('phone-numbers');
       phoneNumbers.addEventListener('input', (e) => {
-        processPhoneNumbers();
+        processPhoneNumbers(e.target);
       });
     });
     //#endregion
@@ -139,35 +161,15 @@
         <div class="field">
           <label class="label">Client mobile phone numbers:</label>
           <div class="control">
-            <input id="phone-numbers" class="input is-info" type="text"
-              placeholder="Enter numbers one-by-one or separated by space, comma, or new-line">
+            <textarea id="phone-numbers" class="input is-info" type="textarea"
+              placeholder="Enter numbers separated by space, comma, or new-line"></textarea>
           </div>
         </div>
 
-        <div class="field is-grouped is-grouped-multiline">
-          <div class="control">
-            <div class="tags has-addons">
-              <a class="tag is-info">(403) 123-4567</a>
-              <a class="tag is-delete"></a>
-            </div>
-          </div>
-
-          <div class="control">
-            <div class="tags has-addons">
-              <a class="tag is-info">(403) 123-4568</a>
-              <a class="tag is-delete"></a>
-            </div>
-          </div>
-
-          <div class="control">
-            <div class="tags has-addons">
-              <a class="tag is-info">(403) 123-4569</a>
-              <a class="tag is-delete"></a>
-            </div>
-          </div>
+        <div id="phone-numbers-list" class="field is-grouped is-grouped-multiline">
         </div>
 
-        <div class="field is-grouped" style="display: flex; justify-content: space-between;">
+        <div class="field is-grouped" style="display: flex; justify-content: space-between; margin-top: 50px;">
           <div class="control">
             <button class="button is-info" onclick="sendSMS()">
               <span>Send &nbsp</span>
