@@ -38,7 +38,7 @@
           (numberUnformatted.length === 10 && numberUnformatted[0] !== '1')) {
           const numberTag = createNumberTagElement(number.trim().replace(',', ''));
           numberTag.addEventListener(getTransitionEndEventName(), (e) => {
-            e.target.parentElement.remove();
+            e.target.parentElement.parentElement.remove();
           })
           numberTag.firstChild.childNodes[1].addEventListener('click', (e) => {
             const xButtonElement = e.target;
