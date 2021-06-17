@@ -37,7 +37,18 @@
         if ((numberUnformatted.length === 11 && numberUnformatted[0] === '1') ||
           (numberUnformatted.length === 10 && numberUnformatted[0] !== '1')) {
           const numberTag = createNumberTagElement(number.trim().replace(',', ''));
-          document.getElementById('phone-numbers-list').insertAdjacentHTML('afterbegin', numberTag);
+          numberTag.addEventListener(getTransitionEndEventName(), (e) => {
+            e.target.parentElement.remove();
+          })
+          numberTag.firstChild.childNodes[1].addEventListener('click', (e) => {
+            const xButtonElement = e.target;
+            const tagElement = xButtonElement.previousSibling;
+            xButtonElement.style.transition = "all 0.5s ease-out";
+            xButtonElement.style.fontSize = 0;
+            tagElement.style.transition = "all 0.5s ease-out";
+            tagElement.style.fontSize = 0;
+          });
+          document.getElementById('phone-numbers-list').appendChild(numberTag);
 
           // Clear the input field
           document.getElementById('phone-numbers').value = '';
@@ -49,13 +60,30 @@
     }
 
     function createNumberTagElement(number) {
-      return "<div onclick='remove(this)' class='control'><div class='tags has-addons'><span class='tag'>" +
-        number +
-        "</span><span class='tag is-delete is-danger is-light'></span></div></div>";
+      const div = document.createElement('div');
+      div.innerHTML =
+        "<div class='control number-tag'>" +
+        "<div class='tags has-addons'>" +
+        "<span class='tag'>" + number + "</span>" +
+        "<span class='tag is-delete is-danger is-light'></span>" +
+        "</div></div>"
+      return div.firstChild;
     }
 
-    function remove(el) {
-      el.remove();
+    // Get Transition end event name based on browser
+    function getTransitionEndEventName() {
+      var transitions = {
+        "transition": "transitionend",
+        "OTransition": "oTransitionEnd",
+        "MozTransition": "transitionend",
+        "WebkitTransition": "webkitTransitionEnd"
+      }
+      let bodyStyle = document.body.style;
+      for (let transition in transitions) {
+        if (bodyStyle[transition] != undefined) {
+          return transitions[transition];
+        }
+      }
     }
     //#endregion
 
