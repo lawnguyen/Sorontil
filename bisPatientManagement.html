@@ -9,6 +9,7 @@
   <script async>
 
     //#region send sms
+    let phoneNumbers = [];
     function sendSMS() {
       // TODO: send sms function here
     }
@@ -36,6 +37,8 @@
       if (!number[number.length - 1].trim().length || number[number.length - 1] === ',') {
         if ((numberUnformatted.length === 11 && numberUnformatted[0] === '1') ||
           (numberUnformatted.length === 10 && numberUnformatted[0] !== '1')) {
+          phoneNumbers.push(numberUnformatted);
+
           const numberTag = createNumberTagElement(number.trim().replace(',', ''));
           numberTag.addEventListener(getTransitionEndEventName(), (e) => {
             e.target.parentElement.parentElement.remove();
