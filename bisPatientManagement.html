@@ -13,11 +13,19 @@
     function sendSMSConfirm() {
       const confirmDialog = document.getElementById('confirm-dialog');
       confirmDialog.classList.add('is-active');
+
+      // Listeners for cancel buttons
       for (const node of document.querySelectorAll('.cancel-confirm')) {
         node.addEventListener('click', (e) => {
           confirmDialog.classList.remove('is-active');
         })
       }
+
+      document.getElementById('confirm-message-body').innerHTML =
+        document.getElementById('message-body-input').value;
+
+      document.getElementById('confirm-phone-numbers').innerHTML =
+        `${phoneNumbers.join(", <br /> ")}`;
     }
     //#endregion
 
@@ -36,7 +44,7 @@
 
     //#region clear all input
     function clearAllFields() {
-      document.getElementById('message-body').value = '';
+      document.getElementById('message-body-input').value = '';
       document.getElementById('phone-numbers').value = '';
     }
     //#endregion
@@ -156,7 +164,7 @@
       // TODO: Get company name from server and set as header
 
       // Character counter event listener
-      const messageBody = document.getElementById('message-body');
+      const messageBody = document.getElementById('message-body-input');
       const messageMaxLength = messageBody.getAttribute('maxlength');
       messageBody.addEventListener('input', (e) => {
         const target = e.target;
@@ -228,7 +236,7 @@
         <div class="field">
           <label class="label">Message body [80 x 4] (max. 160 characters):</label>
           <div class="control">
-            <textarea id="message-body" class="textarea is-info" maxlength="160"></textarea>
+            <textarea id="message-body-input" class="textarea is-info" maxlength="160"></textarea>
             <div style="display: flex; justify-content: flex-end" id="character-counter"></div>
           </div>
         </div>
@@ -278,11 +286,12 @@
                 <button class="delete cancel-confirm" aria-label="delete"></button>
               </div>
               <div class="message-body">
-                <p id="confirm-message-body">
-                  Message: hello world
-                </p>
+                <h5 class="title is-5">Message:</h5>
+                <pre id="confirm-message-body">
+                </pre>
+                <br /><br />
+                <h5 class="title is-5">Client phone numbers:</h5>
                 <p id="confirm-phone-numbers">
-                  4037084037
                 </p>
                 <div style="display: flex; justify-content: flex-end; margin-top: 50px;">
                   <button class="button is-danger is-light cancel-confirm">Cancel</button>
