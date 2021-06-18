@@ -30,11 +30,18 @@
 
     //#region phone number validation
     function processPhoneNumbers(target) {
-      const number = target.value;
-      const numberUnformatted = number.replace(/\D/g, "");
+      let unformattedToOriginalNumberMap = {};
+      let numbers = target.value.split(/[ ,]+/);  // split by whitespace or comma
 
-      // if most recently inputted character is a comma or whitespace
-      if (!number[number.length - 1].trim().length || number[number.length - 1] === ',') {
+      const numbersUnformatted = numbers.map(num => {
+        const unformatted = num.replace(/\D/g, "");
+        unformattedToOriginalNumberMap[unformatted] = num;
+        return unformatted;
+      });
+
+      numbersUnformatted.forEach(numberUnformatted => {
+        const number = unformattedToOriginalNumberMap[numberUnformatted];
+
         if ((numberUnformatted.length === 11 && numberUnformatted[0] === '1') ||
           (numberUnformatted.length === 10 && numberUnformatted[0] !== '1')) {
           phoneNumbers.push(numberUnformatted);
@@ -59,7 +66,7 @@
         }
         console.log('invalid');
         return;
-      }
+      });
     }
 
     function createNumberTagElement(number) {
