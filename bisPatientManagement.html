@@ -10,8 +10,14 @@
 
     //#region send sms
     let phoneNumbers = [];
-    function sendSMS() {
-      // TODO: send sms function here
+    function sendSMSConfirm() {
+      const confirmDialog = document.getElementById('confirm-dialog');
+      confirmDialog.classList.add('is-active');
+      for (const node of document.querySelectorAll('.cancel-confirm')) {
+        node.addEventListener('click', (e) => {
+          confirmDialog.classList.remove('is-active');
+        })
+      }
     }
     //#endregion
 
@@ -57,7 +63,7 @@
         let inputFieldContents = phoneNumbersInput.value;
 
         if (phoneNumbers.includes(numberUnformatted)) {
-          phoneNumbersInput.value = 
+          phoneNumbersInput.value =
             inputFieldContents.replace(number, '').replace(/(^[,\s]+)|([,\s]+$)/g, '');
           return;
         }
@@ -84,7 +90,7 @@
           document.getElementById('phone-numbers-list').appendChild(numberTag);
 
           // Clear the input field
-          phoneNumbersInput.value = 
+          phoneNumbersInput.value =
             inputFieldContents.replace(number, '').replace(/(^[,\s]+)|([,\s]+$)/g, '');
           invalidNumber.style.visibility = 'hidden';
           return;
@@ -249,7 +255,7 @@
 
         <div class="field is-grouped" style="display: flex; justify-content: space-between; margin-top: 50px;">
           <div class="control">
-            <button class="button is-info" onclick="sendSMS()">
+            <button class="button is-info" onclick="sendSMSConfirm()">
               <span>Send &nbsp</span>
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff">
                 <path d="M0 0h24v24H0z" fill="none" />
@@ -262,6 +268,30 @@
               <span>Clear all</span>
             </button>
           </div>
+        </div>
+        <div id="confirm-dialog" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <article class="message is-info">
+              <div class="message-header">
+                <p>Confirm Send?</p>
+                <button class="delete cancel-confirm" aria-label="delete"></button>
+              </div>
+              <div class="message-body">
+                <p id="confirm-message-body">
+                  Message: hello world
+                </p>
+                <p id="confirm-phone-numbers">
+                  4037084037
+                </p>
+                <div style="display: flex; justify-content: flex-end; margin-top: 50px;">
+                  <button class="button is-danger is-light cancel-confirm">Cancel</button>
+                  <button style="margin-left: 10px;" class="button is-info">Send it!</button>
+                </div>
+              </div>
+            </article>
+          </div>
+          <button class="modal-close is-large" aria-label="close"></button>
         </div>
       </div>
     </div>
