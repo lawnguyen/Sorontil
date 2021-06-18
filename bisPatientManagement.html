@@ -28,6 +28,13 @@
     }
     //#endregion
 
+    //#region clear all input
+    function clearAllFields() {
+      document.getElementById('message-body').value = '';
+      document.getElementById('phone-numbers').value = '';
+    }
+    //#endregion
+
     //#region phone number validation
     function processPhoneNumbers(target) {
       let unformattedToOriginalNumberMap = {};
@@ -251,7 +258,7 @@
             </button>
           </div>
           <div class="control" style="display: flex; justify-content: flex-end">
-            <button class="button is-info is-light">
+            <button class="button is-info is-light" onclick="clearAllFields()">
               <span>Clear all</span>
             </button>
           </div>
