@@ -223,7 +223,15 @@
           <div class="control">
             <textarea id="phone-numbers" class="input is-info" type="textarea"
               placeholder="Enter numbers separated by space, comma, or new-line"></textarea>
-            <div style="display: flex; visibility: hidden; justify-content: flex-end; color:orange;" id="invalid-number">Phone numbers must be 10 digits, or 11 digits with the country code (optional)</div>
+            <div style="display: flex; visibility: hidden; justify-content: flex-end; color:orange;"
+              id="invalid-number">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="orange">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <circle cx="12" cy="19" r="2" />
+                <path d="M10 3h4v12h-4z" />
+              </svg>
+              Phone numbers must be 10 digits, or 11 digits with the country code (optional)
+            </div>
           </div>
         </div>
 
