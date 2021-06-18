@@ -10,6 +10,7 @@
 
     //#region send sms
     let phoneNumbers = [];
+
     function sendSMSConfirm() {
       const confirmDialog = document.getElementById('confirm-dialog');
       confirmDialog.classList.add('is-active');
@@ -26,6 +27,10 @@
 
       document.getElementById('confirm-phone-numbers').innerHTML =
         `${phoneNumbers.join(", <br /> ")}`;
+    }
+
+    function sendSMS() {
+      // TODO: send sms here
     }
     //#endregion
 
@@ -47,8 +52,15 @@
       document.getElementById('message-body-input').value = '';
       document.getElementById('phone-numbers').value = '';
 
-      const maxLength = document.getElementById('message-body-input').getAttribute('maxlength');
+      const maxLength =
+        document.getElementById('message-body-input').getAttribute('maxlength');
       setCharacterCounter(0, maxLength);
+
+      phoneNumbers = [];
+      const phoneNumbersList = document.getElementById("phone-numbers-list");
+      while (phoneNumbersList.firstChild) {
+        phoneNumbersList.firstChild.remove();
+      }
     }
     //#endregion
 
@@ -73,6 +85,7 @@
         const phoneNumbersInput = document.getElementById('phone-numbers');
         let inputFieldContents = phoneNumbersInput.value;
 
+        // Remove duplicates
         if (phoneNumbers.includes(numberUnformatted)) {
           phoneNumbersInput.value =
             inputFieldContents.replace(number, '').replace(/(^[,\s]+)|([,\s]+$)/g, '');
