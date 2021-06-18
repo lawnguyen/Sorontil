@@ -33,38 +33,56 @@
       let unformattedToOriginalNumberMap = {};
       let numbers = target.value.split(/[ ,]+/);  // split by whitespace or comma
 
-      const numbersUnformatted = numbers.map(num => {
-        const unformatted = num.replace(/\D/g, "");
+      const numbersUnformatted = [];
+      numbers.forEach(num => {
+        const unformatted = num.replace(/\D/g, '');
+        if (unformattedToOriginalNumberMap[unformatted]) {
+          return;
+        }
         unformattedToOriginalNumberMap[unformatted] = num;
-        return unformatted;
+        numbersUnformatted.push(unformatted);
       });
 
       numbersUnformatted.forEach(numberUnformatted => {
         const number = unformattedToOriginalNumberMap[numberUnformatted];
+        const invalidNumber = document.getElementById('invalid-number');
+        const phoneNumbersInput = document.getElementById('phone-numbers');
+        let inputFieldContents = phoneNumbersInput.value;
 
+        if (phoneNumbers.includes(numberUnformatted)) {
+          phoneNumbersInput.value = inputFieldContents.replace(number, '');
+          return;
+        }
+
+        // Create a number tag for valid numbers
         if ((numberUnformatted.length === 11 && numberUnformatted[0] === '1') ||
           (numberUnformatted.length === 10 && numberUnformatted[0] !== '1')) {
           phoneNumbers.push(numberUnformatted);
 
           const numberTag = createNumberTagElement(number.trim().replace(',', ''));
           numberTag.addEventListener(getTransitionEndEventName(), (e) => {
+            phoneNumbers = phoneNumbers.filter(
+              num => num !== e.target.textContent.replace(/\D/g, ''));
             e.target.parentElement.parentElement.remove();
           })
           numberTag.firstChild.childNodes[1].addEventListener('click', (e) => {
             const xButtonElement = e.target;
             const tagElement = xButtonElement.previousSibling;
-            xButtonElement.style.transition = "all 0.5s ease-out";
+            xButtonElement.style.transition = 'all 0.5s ease-out';
             xButtonElement.style.fontSize = 0;
-            tagElement.style.transition = "all 0.5s ease-out";
+            tagElement.style.transition = 'all 0.5s ease-out';
             tagElement.style.fontSize = 0;
           });
           document.getElementById('phone-numbers-list').appendChild(numberTag);
 
           // Clear the input field
-          document.getElementById('phone-numbers').value = '';
+          phoneNumbersInput.value = inputFieldContents.replace(number, '').replace(/(^[,\s]+)|([,\s]+$)/g, '');
+          invalidNumber.style.visibility = 'hidden';
           return;
         }
-        console.log('invalid');
+
+        // Invalid numbers
+        invalidNumber.style.visibility = 'visible';
         return;
       });
     }
@@ -205,6 +223,7 @@
           <div class="control">
             <textarea id="phone-numbers" class="input is-info" type="textarea"
               placeholder="Enter numbers separated by space, comma, or new-line"></textarea>
+            <div style="display: flex; visibility: hidden; justify-content: flex-end; color:orange;" id="invalid-number">Phone numbers must be 10 digits, or 11 digits with the country code (optional)</div>
           </div>
         </div>
 
