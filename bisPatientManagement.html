@@ -31,7 +31,7 @@
     }
 
     function validateForm() {
-      const isValid = document.getElementById('message-body-input').value != '' && 
+      const isValid = document.getElementById('message-body-input').value != '' &&
         phoneNumbers.length;
       document.getElementById('send-button').disabled = !isValid;
     }
@@ -55,7 +55,22 @@
     //#endregion
 
     //#region clear all input
+    function clearDialog() {
+      const clearDialog = document.getElementById('clear-dialog');
+      clearDialog.classList.add('is-active');
+
+      // Listeners for cancel buttons
+      for (const node of document.querySelectorAll('.cancel-clear')) {
+        node.addEventListener('click', (e) => {
+          clearDialog.classList.remove('is-active');
+        })
+      }
+    }
+
     function clearAllFields() {
+      const clearDialog = document.getElementById('clear-dialog');
+      clearDialog.classList.remove('is-active');
+      
       document.getElementById('message-body-input').value = '';
       document.getElementById('phone-numbers').value = '';
 
@@ -298,11 +313,30 @@
             </button>
           </div>
           <div class="control" style="display: flex; justify-content: flex-end">
-            <button class="button is-info is-light" onclick="clearAllFields()">
+            <button class="button is-info is-light" onclick="clearDialog()">
               <span>Clear all</span>
             </button>
           </div>
         </div>
+
+        <div id="clear-dialog" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <article id="clear-dialog" class="message is-info">
+              <div class="message-body">
+                <h4 class="title is-4">Are you sure you want to clear the form?</h4>
+                <div style="display: flex; justify-content: flex-end; margin-top: 50px;">
+                  <button class="button is-danger is-light cancel-clear">Cancel</button>
+                  <button style="margin-left: 10px;" class="button is-info" onclick="clearAllFields()">
+                    Clear All
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+          <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+
         <div id="confirm-dialog" class="modal">
           <div class="modal-background"></div>
           <div class="modal-content">
@@ -323,7 +357,8 @@
                   <button class="button is-danger is-light cancel-confirm">Cancel</button>
                   <button style="margin-left: 10px;" class="button is-info" onclick="sendSMS()">
                     Send it! &nbsp
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                      fill="#ffffff">
                       <path d="M0 0h24v24H0z" fill="none" />
                       <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                     </svg>
