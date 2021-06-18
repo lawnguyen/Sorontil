@@ -22,11 +22,18 @@
         })
       }
 
+      // Add message details in the dialog
       document.getElementById('confirm-message-body').innerHTML =
         document.getElementById('message-body-input').value;
 
       document.getElementById('confirm-phone-numbers').innerHTML =
         `${phoneNumbers.join(", <br /> ")}`;
+    }
+
+    function validateForm() {
+      const isValid = document.getElementById('message-body-input').value != '' && 
+        phoneNumbers.length;
+      document.getElementById('send-button').disabled = !isValid;
     }
 
     function sendSMS() {
@@ -102,6 +109,7 @@
             phoneNumbers = phoneNumbers.filter(
               num => num !== e.target.textContent.replace(/\D/g, ''));
             e.target.parentElement.parentElement.remove();
+            validateForm();
           })
           numberTag.firstChild.childNodes[1].addEventListener('click', (e) => {
             const xButtonElement = e.target;
@@ -188,6 +196,7 @@
         // Count the current number of characters
         const currentLength = target.value.length;
         setCharacterCounter(currentLength, messageMaxLength);
+        validateForm();
       });
 
       setCharacterCounter(0, messageMaxLength);
@@ -196,6 +205,7 @@
       const phoneNumbers = document.getElementById('phone-numbers');
       phoneNumbers.addEventListener('input', (e) => {
         processPhoneNumbers(e.target);
+        validateForm();
       });
     });
     //#endregion
@@ -279,7 +289,7 @@
 
         <div class="field is-grouped" style="display: flex; justify-content: space-between; margin-top: 50px;">
           <div class="control">
-            <button class="button is-info" onclick="sendSMSConfirm()">
+            <button id="send-button" class="button is-info" onclick="sendSMSConfirm()" disabled>
               <span>Send &nbsp</span>
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff">
                 <path d="M0 0h24v24H0z" fill="none" />
@@ -298,20 +308,26 @@
           <div class="modal-content">
             <article class="message is-info">
               <div class="message-header">
-                <p>Confirm Send?</p>
+                <p>Confirm details</p>
                 <button class="delete cancel-confirm" aria-label="delete"></button>
               </div>
               <div class="message-body">
-                <h5 class="title is-5">Message:</h5>
+                <h6 class="title is-6">Message:</h6>
                 <pre id="confirm-message-body">
                 </pre>
                 <br /><br />
-                <h5 class="title is-5">Client phone numbers:</h5>
+                <h6 class="title is-6">Client phone numbers:</h6>
                 <p id="confirm-phone-numbers">
                 </p>
                 <div style="display: flex; justify-content: flex-end; margin-top: 50px;">
                   <button class="button is-danger is-light cancel-confirm">Cancel</button>
-                  <button style="margin-left: 10px;" class="button is-info">Send it!</button>
+                  <button style="margin-left: 10px;" class="button is-info" onclick="sendSMS()">
+                    Send it! &nbsp
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff">
+                      <path d="M0 0h24v24H0z" fill="none" />
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             </article>
