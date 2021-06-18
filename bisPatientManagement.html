@@ -50,7 +50,8 @@
         let inputFieldContents = phoneNumbersInput.value;
 
         if (phoneNumbers.includes(numberUnformatted)) {
-          phoneNumbersInput.value = inputFieldContents.replace(number, '');
+          phoneNumbersInput.value = 
+            inputFieldContents.replace(number, '').replace(/(^[,\s]+)|([,\s]+$)/g, '');
           return;
         }
 
@@ -76,13 +77,14 @@
           document.getElementById('phone-numbers-list').appendChild(numberTag);
 
           // Clear the input field
-          phoneNumbersInput.value = inputFieldContents.replace(number, '').replace(/(^[,\s]+)|([,\s]+$)/g, '');
+          phoneNumbersInput.value = 
+            inputFieldContents.replace(number, '').replace(/(^[,\s]+)|([,\s]+$)/g, '');
           invalidNumber.style.visibility = 'hidden';
           return;
         }
 
         // Invalid numbers
-        invalidNumber.style.visibility = 'visible';
+        invalidNumber.style.visibility = phoneNumbersInput.value ? 'visible' : 'hidden';
         return;
       });
     }
