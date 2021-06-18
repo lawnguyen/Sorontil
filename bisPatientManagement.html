@@ -46,6 +46,9 @@
     function clearAllFields() {
       document.getElementById('message-body-input').value = '';
       document.getElementById('phone-numbers').value = '';
+
+      const maxLength = document.getElementById('message-body-input').getAttribute('maxlength');
+      setCharacterCounter(0, maxLength);
     }
     //#endregion
 
