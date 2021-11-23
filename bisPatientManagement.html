@@ -206,6 +206,13 @@
       }
 
       // TODO: Get company name from server and set as header
+      const PAGE_INFO = {
+        PageInfo: {
+          name: "Nam Enterprise Customer Service",
+          userId: "l.nguyen@nncs"
+        }
+      }
+      document.getElementById('company-name').innerHTML = PAGE_INFO.PageInfo.name;
 
       // Character counter event listener
       const messageBody = document.getElementById('message-body-input');
@@ -276,8 +283,7 @@
   <section class="section">
     <div class="columns is-mobile">
       <div class="column is-three-fifths-desktop is-offset-one-fifth-desktop">
-        <h1 class="title is-1">
-          <strong>LE FAMILY DENTAL</strong>
+        <h1 id="company-name" class="title is-1">
         </h1>
         <div class="field">
           <label class="label">Message body [80 x 4] (max. 160 characters):</label>
