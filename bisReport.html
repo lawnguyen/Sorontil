@@ -70,7 +70,7 @@
           if (dateValue) {
             textValue = dateValue.textContent || dateValue.innerText;
             const regex =
-              /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{3})/;
+              /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{2})/;
             const match = regex.exec(textValue);
             const date = new Date(
               match[1],
@@ -175,7 +175,7 @@
           // format from server is 2021-05-31 12:45:58.929, timezone unknown
           // TODO: display in format Fri, 16 May 2015 05:40:02 GMT
           let regex =
-            /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{3})/;
+            /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{2})/;
           let xMatch = regex.exec(x.innerHTML);
           let yMatch = regex.exec(y.innerHTML);
           let xDate = new Date(
@@ -187,6 +187,9 @@
             xMatch[6],
             xMatch[7]
           );
+          if (yMatch == null) {
+            console.log("help");
+          }
           let yDate = new Date(
             yMatch[1],
             yMatch[2] - 1,
