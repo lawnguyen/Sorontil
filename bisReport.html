@@ -1,397 +1,728 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sorontil - Reports</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css"
+    />
+    <script async>
+      // Default values
+      let currentFilterById = "filter-7-days";
+      let currentSortById = "sort-by-time";
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sorontil - Reports</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-  <script async>
-
-    // Default values
-    let currentFilterById = 'filter-7-days';
-    let currentSortById = 'sort-by-time';
-
-    //#region dropdown
-    function toggleDropdown(dropdownButtonId) {
-      const dropdown = document.getElementById(dropdownButtonId);
-      if (dropdown.classList.contains('is-active')) {
-        dropdown.classList.remove('is-active');
-      } else {
-        closeAllDropdowns();
-        dropdown.classList.add('is-active');
-      }
-    }
-
-    function closeAllDropdowns() {
-      // TODO: close sort dropdown when clicking elsewhere in the page
-      document.querySelectorAll(".dropdown.is-active").forEach(elem => {
-        elem.classList.remove('is-active');
-      });
-    }
-
-    function sortOrFilter(operationId, operation) {
-      const currentOperationId = operation === 'sort' ? currentSortById : currentFilterById;
-      if (operationId !== currentOperationId) {
-        if (currentOperationId) {
-          document.getElementById(currentOperationId).classList.remove('is-active');
-        }
-        if (operation === 'sort') {
-          toggleDropdown('sort-button');
-          sortTable(operationId);
-        } else if (operation === 'filter') {
-          toggleDropdown('filter-button');
-          filterTable(operationId);
+      //#region dropdown
+      function toggleDropdown(dropdownButtonId) {
+        const dropdown = document.getElementById(dropdownButtonId);
+        if (dropdown.classList.contains("is-active")) {
+          dropdown.classList.remove("is-active");
+        } else {
+          closeAllDropdowns();
+          dropdown.classList.add("is-active");
         }
       }
-    }
-    //#endregion
 
-    //#region filtering
-    function filterTable(operationId) {
-      let filter, table, rows, td, textValue;
+      function closeAllDropdowns() {
+        // TODO: close sort dropdown when clicking elsewhere in the page
+        document.querySelectorAll(".dropdown.is-active").forEach((elem) => {
+          elem.classList.remove("is-active");
+        });
+      }
 
-      const selectedElement = document.getElementById(operationId);
-      document.getElementById('current-filter-by').textContent = selectedElement.innerText;
-      selectedElement.classList.add('is-active');
-      currentFilterById = operationId;
-
-      table = document.getElementById("table-body");
-      rows = table.getElementsByTagName("TR");
-
-      // Loop through all table rows, and hide those who don't match the search query
-      for (let i = 0; i < rows.length; i++) {
-        dateValue = rows[i].getElementsByTagName("TD")[0];
-        if (dateValue) {
-          textValue = dateValue.textContent || dateValue.innerText;
-          const regex = /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{3})/;
-          const match = regex.exec(textValue);
-          const date = new Date(match[1], match[2] - 1, match[3], match[4], match[5], match[6], match[7]);
-
-          if (shouldFilterRow(operationId, date)) {
-            rows[i].style.display = "none";
-          } else {
-            rows[i].style.display = "";
+      function sortOrFilter(operationId, operation) {
+        const currentOperationId =
+          operation === "sort" ? currentSortById : currentFilterById;
+        if (operationId !== currentOperationId) {
+          if (currentOperationId) {
+            document
+              .getElementById(currentOperationId)
+              .classList.remove("is-active");
+          }
+          if (operation === "sort") {
+            toggleDropdown("sort-button");
+            sortTable(operationId);
+          } else if (operation === "filter") {
+            toggleDropdown("filter-button");
+            filterTable(operationId);
           }
         }
       }
-    }
+      //#endregion
 
-    function shouldFilterRow(operationId, date) {
-      // TODO: convert all dates to UTC or ISO before comparing, need to confirm timezones from server
-      let shouldFilter = false;
-      const currentDate = Date.now();
-      const rowDate = date.valueOf();
-      switch (operationId) {
-        case 'filter-1-hour':
-          shouldFilter = rowDate < currentDate - 3600000  // number of ms in one hour
-          break;
-        case 'filter-24-hour':
-          shouldFilter = rowDate < currentDate - 86400000  // number of ms in 24 hr
-          break;
-        case 'filter-48-hour':
-          shouldFilter = rowDate < currentDate - 172800000  // number of ms in 48 hr
-          break;
-        case 'filter-7-days':
-          shouldFilter = rowDate < currentDate - 604800000  // number of ms in 7 days
-          break;
-        case 'filter-30-days':
-          shouldFilter = rowDate < currentDate - 2592000000  // number of ms in 30 days
-          break;
-        case 'filter-none':
-          shouldFilter = false;
-          break;
+      //#region filtering
+      function filterTable(operationId) {
+        let filter, table, rows, td, textValue;
+
+        const selectedElement = document.getElementById(operationId);
+        document.getElementById("current-filter-by").textContent =
+          selectedElement.innerText;
+        selectedElement.classList.add("is-active");
+        currentFilterById = operationId;
+
+        table = document.getElementById("table-body");
+        rows = table.getElementsByTagName("TR");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (let i = 0; i < rows.length; i++) {
+          dateValue = rows[i].getElementsByTagName("TD")[0];
+          if (dateValue) {
+            textValue = dateValue.textContent || dateValue.innerText;
+            const regex =
+              /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{3})/;
+            const match = regex.exec(textValue);
+            const date = new Date(
+              match[1],
+              match[2] - 1,
+              match[3],
+              match[4],
+              match[5],
+              match[6],
+              match[7]
+            );
+
+            if (shouldFilterRow(operationId, date)) {
+              rows[i].style.display = "none";
+            } else {
+              rows[i].style.display = "";
+            }
+          }
+        }
       }
-      return shouldFilter;
-    }
-    //#endregion
 
-    //#region sorting
-    function sortTable(operationId) {
-      let table, rows, switching, i, x, y, shouldSwitch, columnIndex;
-      const columnToIndexMap = {
-        'sort-by-time': 0,
-        'sort-by-users': 1,
-        'sort-by-status': 4
-      };
-
-      const selectedElement = document.getElementById(operationId);
-      document.getElementById('current-sort-by').textContent = selectedElement.innerText;
-      selectedElement.classList.add('is-active');
-      currentSortById = operationId;
-
-      table = document.getElementById('table-body');
-      columnIndex = columnToIndexMap[operationId];
-      switching = true;
-      // Make a loop that will continue until no switching has been done
-      while (switching) {
-        switching = false;
-        rows = table.rows;
-        // Loop through all table rows
-        for (i = 0; i < (rows.length - 1); i++) {
-          shouldSwitch = false;
-          // Get the two elements you want to compare, one from current row and one from the next
-          x = rows[i].getElementsByTagName("TD")[columnIndex];
-          y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
-          // Check if the two rows should switch place:
-          if (shouldSwitchRows(operationId, x, y)) {
-            shouldSwitch = true;
+      function shouldFilterRow(operationId, date) {
+        // TODO: convert all dates to UTC or ISO before comparing, need to confirm timezones from server
+        let shouldFilter = false;
+        const currentDate = Date.now();
+        const rowDate = date.valueOf();
+        switch (operationId) {
+          case "filter-1-hour":
+            shouldFilter = rowDate < currentDate - 3600000; // number of ms in one hour
             break;
+          case "filter-24-hour":
+            shouldFilter = rowDate < currentDate - 86400000; // number of ms in 24 hr
+            break;
+          case "filter-48-hour":
+            shouldFilter = rowDate < currentDate - 172800000; // number of ms in 48 hr
+            break;
+          case "filter-7-days":
+            shouldFilter = rowDate < currentDate - 604800000; // number of ms in 7 days
+            break;
+          case "filter-30-days":
+            shouldFilter = rowDate < currentDate - 2592000000; // number of ms in 30 days
+            break;
+          case "filter-none":
+            shouldFilter = false;
+            break;
+        }
+        return shouldFilter;
+      }
+      //#endregion
+
+      //#region sorting
+      function sortTable(operationId) {
+        let table, rows, switching, i, x, y, shouldSwitch, columnIndex;
+        const columnToIndexMap = {
+          "sort-by-time": 0,
+          "sort-by-users": 1,
+          "sort-by-status": 4,
+        };
+
+        const selectedElement = document.getElementById(operationId);
+        document.getElementById("current-sort-by").textContent =
+          selectedElement.innerText;
+        selectedElement.classList.add("is-active");
+        currentSortById = operationId;
+
+        table = document.getElementById("table-body");
+        columnIndex = columnToIndexMap[operationId];
+        switching = true;
+        // Make a loop that will continue until no switching has been done
+        while (switching) {
+          switching = false;
+          rows = table.rows;
+          // Loop through all table rows
+          for (i = 0; i < rows.length - 1; i++) {
+            shouldSwitch = false;
+            // Get the two elements you want to compare, one from current row and one from the next
+            x = rows[i].getElementsByTagName("TD")[columnIndex];
+            y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+            // Check if the two rows should switch place:
+            if (shouldSwitchRows(operationId, x, y)) {
+              shouldSwitch = true;
+              break;
+            }
+          }
+          if (shouldSwitch) {
+            // If a switch has been marked, make the switch and mark that a switch has been done
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
           }
         }
-        if (shouldSwitch) {
-          // If a switch has been marked, make the switch and mark that a switch has been done
-          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-          switching = true;
-        }
       }
-    }
 
-    function shouldSwitchRows(operationId, x, y) {
-      if (operationId === 'sort-by-users' || operationId === 'sort-by-status') {
-        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-          return true;
-        }
-      }
-      if (operationId === 'sort-by-time') {
-        // format from server is 2021-05-31 12:45:58.929, timezone unknown
-        // TODO: display in format Fri, 16 May 2015 05:40:02 GMT
-        let regex = /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{3})/;
-        let xMatch = regex.exec(x.innerHTML);
-        let yMatch = regex.exec(y.innerHTML);
-        let xDate = new Date(xMatch[1], xMatch[2] - 1, xMatch[3], xMatch[4], xMatch[5], xMatch[6], xMatch[7]);
-        let yDate = new Date(yMatch[1], yMatch[2] - 1, yMatch[3], yMatch[4], yMatch[5], yMatch[6], yMatch[7]);
-
-        if (xDate < yDate) {
-          return true;
-        }
-      }
-      return false;
-    }
-    //#endregion
-
-    //#region refresh
-    function refreshTable() {
-      // TODO: make server call to get new table data
-      populateTable();
-    }
-    //#endregion
-
-    //#region initialization
-    function populateTable() {
-      // TODO: Get this data from the server and convert into a user-friendly format
-      data = [
-        ["2021-06-18 23:45:58.929", "jason@lfd", "+14031234567", "SMS1", "Succeeded"],
-        ["2021-06-18 01:45:58.929", "katherine@lfd", "+14031234567", "SMS2", "Succeeded"],
-        ["2021-06-17 11:45:58.929", "Candace@lfd", "+14031234567", "SMS3", "Succeeded"],
-        ["2021-06-15 03:45:58.929", "John@lfd", "+14031234567", "SMS4", "Succeeded"],
-        ["2021-05-31 24:45:58.929", "Jane@lfd", "+14031234567", "SMS5", "Succeeded"],
-        ["2021-05-31 15:45:58.929", "Michael@lfd", "+14031234567", "SMS6", "Succeeded"],
-        ["2021-05-31 16:45:58.929", "Jim@lfd", "+14031234567", "SMS7", "Succeeded"],
-        ["2021-05-31 12:35:58.929", "Joe@lfd", "+14031234567", "SMS8", "Succeeded"],
-        ["2021-05-31 12:25:58.929", "Paul@lfd", "+14031234567", "SMS9", "Succeeded"],
-        ["2021-05-31 12:46:58.929", "Bob@lfd", "+14031234567", "SMS10", "Succeeded"],
-        ["2021-05-31 12:21:58.929", "Alice@lfd", "+14031234567", "SMS11", "Failed"],
-        ["2021-05-31 12:45:04.929", "Lisa@lfd", "+14031234567", "SMS12", "Succeeded"],
-        ["2021-05-31 12:45:12.929", "james@lfd", "+14031234567", "SMS13", "Succeeded"],
-        ["2021-04-31 12:45:58.929", "tim@lfd", "+14031234567", "SMS14", "Succeeded"],
-        ["2021-03-31 12:45:58.929", "alexander@lfd", "+14031234567", "SMS15", "Succeeded"]
-      ];
-
-      clearTable();
-      const tableBody = document.getElementById('table-body');
-      let rowNum = 0;
-      data.forEach(x => {
-        let row = tableBody.insertRow(rowNum);
-        let cellNum = 0;
-        x.forEach(y => {
-          let cell = row.insertCell(cellNum);
-          cell.innerHTML = y;
-          if (y === 'Succeeded') {
-            cell.style.color = 'green';
+      function shouldSwitchRows(operationId, x, y) {
+        if (
+          operationId === "sort-by-users" ||
+          operationId === "sort-by-status"
+        ) {
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            return true;
           }
-          if (y === 'Failed') {
-            cell.style.color = 'red';
+        }
+        if (operationId === "sort-by-time") {
+          // format from server is 2021-05-31 12:45:58.929, timezone unknown
+          // TODO: display in format Fri, 16 May 2015 05:40:02 GMT
+          let regex =
+            /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d{3})/;
+          let xMatch = regex.exec(x.innerHTML);
+          let yMatch = regex.exec(y.innerHTML);
+          let xDate = new Date(
+            xMatch[1],
+            xMatch[2] - 1,
+            xMatch[3],
+            xMatch[4],
+            xMatch[5],
+            xMatch[6],
+            xMatch[7]
+          );
+          let yDate = new Date(
+            yMatch[1],
+            yMatch[2] - 1,
+            yMatch[3],
+            yMatch[4],
+            yMatch[5],
+            yMatch[6],
+            yMatch[7]
+          );
+
+          if (xDate < yDate) {
+            return true;
           }
-          cellNum++;
+        }
+        return false;
+      }
+      //#endregion
+
+      //#region refresh
+      function refreshTable() {
+        // TODO: make server call to get new table data
+        populateTable();
+      }
+      //#endregion
+
+      //#region initialization
+      function populateTable() {
+        // TODO: Get this data from the server and convert into a user-friendly format
+        smsReports = {
+          CompanyName: "Comapny ABC",
+          "SMS Report": [
+            {
+              "Report SMS phoneNumber": "+15877031458",
+              "Report SMS_ID": "SM5729a4c8fa08431abd0a0ef6554c2128",
+              "Report userID": "a.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-10-21 21:27:06.193",
+            },
+            {
+              "Report SMS phoneNumber": "+115877031458",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "a.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-10-21 21:27:05.818",
+            },
+            {
+              "Report SMS phoneNumber": "+115877031458",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "a.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-10-21 21:27:05.802",
+            },
+            {
+              "Report SMS phoneNumber": "+16477074135",
+              "Report SMS_ID": "SMaff710815fa24e698c9ef280afad93de",
+              "Report userID": "nam.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-10-17 14:52:04.367",
+            },
+            {
+              "Report SMS phoneNumber": "+16474702520",
+              "Report SMS_ID": "SM56e36cc9ffc2491992b41adc234c5eb3",
+              "Report userID": "nam.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-10-17 14:52:04.18",
+            },
+            {
+              "Report SMS phoneNumber": "+15877031458",
+              "Report SMS_ID": "SMe9f9d92f64d74c68a1b8734b1a96f636",
+              "Report userID": "nam.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-10-17 14:52:04.008",
+            },
+            {
+              "Report SMS phoneNumber": "+15877031458",
+              "Report SMS_ID": "SM55c3e0e5ed044fbaa3652cdd232f4147",
+              "Report userID": "l.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-10-11 22:26:07.964",
+            },
+            {
+              "Report SMS phoneNumber": "+115877031458",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "l.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-10-11 22:26:06.136",
+            },
+            {
+              "Report SMS phoneNumber": "+115877031458",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "l.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-10-11 22:26:06.026",
+            },
+            {
+              "Report SMS phoneNumber": "+18322176851",
+              "Report SMS_ID": "SM7cdd1259df514c739e5d04335711f9a0",
+              "Report userID": "tin.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-09-16 14:03:31.425",
+            },
+            {
+              "Report SMS phoneNumber": "+158770314587",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-16 14:01:19.566",
+            },
+            {
+              "Report SMS phoneNumber": "+15877031458",
+              "Report SMS_ID": "SM36af5f06d8e54ac8a6a792e263679bc6",
+              "Report userID": "tin.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-09-16 14:00:36.832",
+            },
+            {
+              "Report SMS phoneNumber": "+1Nam.",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-15 18:10:22.273",
+            },
+            {
+              "Report SMS phoneNumber": "+1anh",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-15 18:10:22.257",
+            },
+            {
+              "Report SMS phoneNumber": "+1Hi",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-15 18:10:22.226",
+            },
+            {
+              "Report SMS phoneNumber": "+1Nam.",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-15 18:09:55.601",
+            },
+            {
+              "Report SMS phoneNumber": "+1anh",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-15 18:09:55.585",
+            },
+            {
+              "Report SMS phoneNumber": "+1Hi",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-15 18:09:55.554",
+            },
+            {
+              "Report SMS phoneNumber": "+1v&#7845;u.",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ":
+                "Exception: The 'To' number +17845 is not a valid phone number.",
+              "Report datetime test": "2021-09-15 18:07:46.678",
+            },
+            {
+              "Report SMS phoneNumber": "+1em",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-15 18:07:46.194",
+            },
+            {
+              "Report SMS phoneNumber": "+1yêu",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-15 18:07:46.194",
+            },
+            {
+              "Report SMS phoneNumber": "+1Hi",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-15 18:07:46.147",
+            },
+            {
+              "Report SMS phoneNumber": "+18328122195",
+              "Report SMS_ID": "SMe10cd9b4f4aa411c8a4f1319607dc271",
+              "Report userID": "nam.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-09-14 18:27:29.86",
+            },
+            {
+              "Report SMS phoneNumber": "+118328122195",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "nam.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-14 18:27:16.422",
+            },
+            {
+              "Report SMS phoneNumber": "+1anh",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-14 18:11:19.548",
+            },
+            {
+              "Report SMS phoneNumber": "+1nam",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-14 18:11:19.548",
+            },
+            {
+              "Report SMS phoneNumber": "+1hi",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-14 18:11:19.501",
+            },
+            {
+              "Report SMS phoneNumber": "+1hi",
+              "Report SMS_ID": "NO message SID",
+              "Report userID": "tin.nguyen@nncs",
+              "report Status ": "Invalid phone number.",
+              "Report datetime test": "2021-09-12 15:38:43.415",
+            },
+            {
+              "Report SMS phoneNumber": "+18322890056",
+              "Report SMS_ID": "SM6f0bcb26dd754ceab2b3abbe1745942c",
+              "Report userID": "Tin.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-09-07 15:26:47.28",
+            },
+            {
+              "Report SMS phoneNumber": "+15877031458",
+              "Report SMS_ID": "SMe36e96c1c7c54fd09442c3037b064088",
+              "Report userID": "nam.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-09-06 14:13:46.074",
+            },
+            {
+              "Report SMS phoneNumber": "+15877031458",
+              "Report SMS_ID": "SM79ddd8ff4dfd49f188fe4320dacc80b3",
+              "Report userID": "nam.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-09-06 14:13:45.824",
+            },
+            {
+              "Report SMS phoneNumber": "+15877031458",
+              "Report SMS_ID": "SMaaf7fcdc13394b2d98e64bbdfd8d2018",
+              "Report userID": "nam.nguyen@nncs",
+              "report Status ": "ok",
+              "Report datetime test": "2021-09-06 13:56:56.746",
+            },
+          ],
+          userId: "nnguyen@nncs",
+        };
+
+        const data = smsReports["SMS Report"];
+
+        clearTable();
+        const tableBody = document.getElementById("table-body");
+        let rowNum = 0;
+        data.forEach((x) => {
+          let row = tableBody.insertRow(rowNum);
+          let timeCell, userIdCell, phoneNumberCell, idCell, statusCell;
+          timeCell = row.insertCell(-1);
+          userIdCell = row.insertCell(-1);
+          phoneNumberCell = row.insertCell(-1);
+          idCell = row.insertCell(-1);
+          statusCell = row.insertCell(-1);
+
+          for (const property in x) {
+            const value = x[property];
+
+            if (property === "Report datetime test") {
+              timeCell.innerHTML = value;
+            }
+            if (property === "Report userID") {
+              userIdCell.innerHTML = value;
+            }
+            if (property === "Report SMS phoneNumber") {
+              phoneNumberCell.innerHTML = value;
+            }
+            if (property === "Report SMS_ID") {
+              idCell.innerHTML = value;
+            }
+            if (property === "report Status ") {
+              statusCell.innerHTML = value;
+              if (value === "ok") {
+                statusCell.style.color = "green";
+              } else {
+                statusCell.style.color = "red";
+              }
+            }
+          }
+          rowNum++;
         });
-        rowNum++;
+
+        sortTable(currentSortById);
+        filterTable(currentFilterById);
+      }
+
+      function clearTable() {
+        const tableBody = document.getElementById("table-body");
+        while (tableBody.firstChild) {
+          tableBody.firstChild.remove();
+        }
+      }
+
+      // Close all dropdowns when clicking elsewhere on the page
+      document.addEventListener("click", (event) => {
+        const sortDropdown = document.getElementById("sort-button");
+        const filterDropdown = document.getElementById("filter-button");
+        const isClickInside =
+          sortDropdown.contains(event.target) ||
+          filterDropdown.contains(event.target);
+
+        if (!isClickInside) {
+          closeAllDropdowns();
+        }
       });
 
-      sortTable(currentSortById);
-      filterTable(currentFilterById);
-    }
+      document.addEventListener("DOMContentLoaded", () => {
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(
+          document.querySelectorAll(".navbar-burger"),
+          0
+        );
 
-    function clearTable() {
-      const tableBody = document.getElementById('table-body');
-      while (tableBody.firstChild) {
-        tableBody.firstChild.remove();
-      }
-    }
+        // Check if there are any navbar burgers
+        if ($navbarBurgers.length > 0) {
+          // Add a click event on each of them
+          $navbarBurgers.forEach((el) => {
+            el.addEventListener("click", () => {
+              // Get the target from the "data-target" attribute
+              const target = el.dataset.target;
+              const $target = document.getElementById(target);
 
-    // Close all dropdowns when clicking elsewhere on the page
-    document.addEventListener('click', event => {
-      const sortDropdown = document.getElementById('sort-button');
-      const filterDropdown = document.getElementById('filter-button');
-      const isClickInside =
-        sortDropdown.contains(event.target) ||
-        filterDropdown.contains(event.target);
-
-      if (!isClickInside) {
-        closeAllDropdowns();
-      }
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      // Get all "navbar-burger" elements
-      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-      // Check if there are any navbar burgers
-      if ($navbarBurgers.length > 0) {
-
-        // Add a click event on each of them
-        $navbarBurgers.forEach(el => {
-          el.addEventListener('click', () => {
-
-            // Get the target from the "data-target" attribute
-            const target = el.dataset.target;
-            const $target = document.getElementById(target);
-
-            // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-            el.classList.toggle('is-active');
-            $target.classList.toggle('is-active');
+              // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+              el.classList.toggle("is-active");
+              $target.classList.toggle("is-active");
+            });
           });
-        });
-      }
+        }
 
-      populateTable();
-    });
-    //#endregion
-  </script>
-</head>
+        populateTable();
+      });
+      //#endregion
+    </script>
+  </head>
 
-<body>
-  <nav class="navbar is-info" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item">
-        <span style="font-size: 1.5em">
-          <strong>Sorontil</strong>
-        </span>
-      </a>
-
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navigation-bar">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-
-    <div id="navigation-bar" class="navbar-menu">
-      <div class="navbar-start">
+  <body>
+    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
         <a class="navbar-item">
-          Home
+          <span style="font-size: 1.5em">
+            <strong>Sorontil</strong>
+          </span>
         </a>
 
-        <a class="navbar-item is-active">
-          Reports
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navigation-bar"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
         </a>
       </div>
 
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <a class="button" style="color: red">
-            <span>Log out &nbsp</span>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="red">
+      <div id="navigation-bar" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item"> Home </a>
+
+          <a class="navbar-item is-active"> Reports </a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <a class="button" style="color: red">
+              <span>Log out &nbsp</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 0 24 24"
+                width="24px"
+                fill="red"
+              >
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path
+                  d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="section">
+      <div class="columns">
+        <div class="column">
+          <div id="sort-button" class="dropdown">
+            <div class="dropdown-trigger">
+              <button
+                class="button"
+                aria-haspopup="true"
+                aria-controls="dropdown-menu"
+                onclick="toggleDropdown('sort-button')"
+              >
+                Sort by: &nbsp<strong
+                  ><span id="current-sort-by"></span
+                ></strong>
+              </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+              <div class="dropdown-content">
+                <a
+                  id="sort-by-time"
+                  class="dropdown-item"
+                  onclick="sortOrFilter(this.id, 'sort')"
+                >
+                  Time
+                </a>
+                <a
+                  id="sort-by-users"
+                  class="dropdown-item"
+                  onclick="sortOrFilter(this.id, 'sort')"
+                >
+                  User Id
+                </a>
+                <a
+                  id="sort-by-status"
+                  class="dropdown-item"
+                  onclick="sortOrFilter(this.id, 'sort')"
+                >
+                  Status
+                </a>
+              </div>
+            </div>
+          </div>
+          <div id="filter-button" class="dropdown">
+            <div class="dropdown-trigger">
+              <button
+                class="button"
+                aria-haspopup="true"
+                aria-controls="dropdown-menu"
+                onclick="toggleDropdown('filter-button')"
+              >
+                View: &nbsp<strong><span id="current-filter-by"></span></strong>
+              </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+              <div class="dropdown-content">
+                <a
+                  id="filter-1-hour"
+                  class="dropdown-item"
+                  onclick="sortOrFilter(this.id, 'filter')"
+                >
+                  Last 1 hour
+                </a>
+                <a
+                  id="filter-24-hour"
+                  class="dropdown-item"
+                  onclick="sortOrFilter(this.id, 'filter')"
+                >
+                  Last 24 hours
+                </a>
+                <a
+                  id="filter-48-hour"
+                  class="dropdown-item"
+                  onclick="sortOrFilter(this.id, 'filter')"
+                >
+                  Last 48 hours
+                </a>
+                <a
+                  id="filter-7-days"
+                  class="dropdown-item"
+                  onclick="sortOrFilter(this.id, 'filter')"
+                >
+                  Last 7 days
+                </a>
+                <a
+                  id="filter-30-days"
+                  class="dropdown-item"
+                  onclick="sortOrFilter(this.id, 'filter')"
+                >
+                  Last 30 days
+                </a>
+                <a
+                  id="filter-none"
+                  class="dropdown-item"
+                  onclick="sortOrFilter(this.id, 'filter')"
+                >
+                  All
+                </a>
+              </div>
+            </div>
+          </div>
+          <button class="button is-info is-rounded" onclick="refreshTable()">
+            Refresh
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 0 24 24"
+              width="24px"
+              fill="#ffffff"
+            >
               <path d="M0 0h24v24H0z" fill="none" />
               <path
-                d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+              />
             </svg>
-          </a>
+          </button>
         </div>
       </div>
-    </div>
-  </nav>
-
-  <section class="section">
-    <div class="columns">
-      <div class="column">
-        <div id="sort-button" class="dropdown">
-          <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu"
-              onclick="toggleDropdown('sort-button')">
-              Sort by: &nbsp<strong><span id="current-sort-by"></span></strong>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-menu" role="menu">
-            <div class="dropdown-content">
-              <a id="sort-by-time" class="dropdown-item" onclick="sortOrFilter(this.id, 'sort')">
-                Time
-              </a>
-              <a id="sort-by-users" class="dropdown-item" onclick="sortOrFilter(this.id, 'sort')">
-                User Id
-              </a>
-              <a id="sort-by-status" class="dropdown-item" onclick="sortOrFilter(this.id, 'sort')">
-                Status
-              </a>
-            </div>
-          </div>
-        </div>
-        <div id="filter-button" class="dropdown">
-          <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu"
-              onclick="toggleDropdown('filter-button')">
-              View: &nbsp<strong><span id="current-filter-by"></span></strong>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-menu" role="menu">
-            <div class="dropdown-content">
-              <a id="filter-1-hour" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
-                Last 1 hour
-              </a>
-              <a id="filter-24-hour" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
-                Last 24 hours
-              </a>
-              <a id="filter-48-hour" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
-                Last 48 hours
-              </a>
-              <a id="filter-7-days" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
-                Last 7 days
-              </a>
-              <a id="filter-30-days" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
-                Last 30 days
-              </a>
-              <a id="filter-none" class="dropdown-item" onclick="sortOrFilter(this.id, 'filter')">
-                All
-              </a>
-            </div>
-          </div>
-        </div>
-        <button class="button is-info is-rounded" onclick="refreshTable()">
-          Refresh
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff">
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path
-              d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
-          </svg>
-        </button>
+      <div class="table-container">
+        <table class="table is-striped">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>User Id</th>
+              <th>Phone Number</th>
+              <th>Id</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
       </div>
-    </div>
-    <div class="table-container">
-      <table class="table is-striped">
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>User Id</th>
-            <th>Phone Number</th>
-            <th>Id</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="table-body">
-        </tbody>
-      </table>
-    </div>
-  </section>
-</body>
-
+    </section>
+  </body>
 </html>
