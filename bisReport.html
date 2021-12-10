@@ -10,41 +10,41 @@
     />
     <script async>
       // Default values
-      let currentFilterById = "filter-7-days";
-      let currentSortById = "sort-by-time";
+      let currentFilterById = 'filter-7-days';
+      let currentSortById = 'sort-by-time';
 
       //#region dropdown
       function toggleDropdown(dropdownButtonId) {
         const dropdown = document.getElementById(dropdownButtonId);
-        if (dropdown.classList.contains("is-active")) {
-          dropdown.classList.remove("is-active");
+        if (dropdown.classList.contains('is-active')) {
+          dropdown.classList.remove('is-active');
         } else {
           closeAllDropdowns();
-          dropdown.classList.add("is-active");
+          dropdown.classList.add('is-active');
         }
       }
 
       function closeAllDropdowns() {
         // TODO: close sort dropdown when clicking elsewhere in the page
-        document.querySelectorAll(".dropdown.is-active").forEach((elem) => {
-          elem.classList.remove("is-active");
+        document.querySelectorAll('.dropdown.is-active').forEach((elem) => {
+          elem.classList.remove('is-active');
         });
       }
 
       function sortOrFilter(operationId, operation) {
         const currentOperationId =
-          operation === "sort" ? currentSortById : currentFilterById;
+          operation === 'sort' ? currentSortById : currentFilterById;
         if (operationId !== currentOperationId) {
           if (currentOperationId) {
             document
               .getElementById(currentOperationId)
-              .classList.remove("is-active");
+              .classList.remove('is-active');
           }
-          if (operation === "sort") {
-            toggleDropdown("sort-button");
+          if (operation === 'sort') {
+            toggleDropdown('sort-button');
             sortTable(operationId);
-          } else if (operation === "filter") {
-            toggleDropdown("filter-button");
+          } else if (operation === 'filter') {
+            toggleDropdown('filter-button');
             filterTable(operationId);
           }
         }
@@ -56,17 +56,17 @@
         let filter, table, rows, td, textValue;
 
         const selectedElement = document.getElementById(operationId);
-        document.getElementById("current-filter-by").textContent =
+        document.getElementById('current-filter-by').textContent =
           selectedElement.innerText;
-        selectedElement.classList.add("is-active");
+        selectedElement.classList.add('is-active');
         currentFilterById = operationId;
 
-        table = document.getElementById("table-body");
-        rows = table.getElementsByTagName("TR");
+        table = document.getElementById('table-body');
+        rows = table.getElementsByTagName('TR');
 
         // Loop through all table rows, and hide those who don't match the search query
         for (let i = 0; i < rows.length; i++) {
-          dateValue = rows[i].getElementsByTagName("TD")[0];
+          dateValue = rows[i].getElementsByTagName('TD')[0];
           if (dateValue) {
             textValue = dateValue.textContent || dateValue.innerText;
             const regex =
@@ -83,9 +83,9 @@
             );
 
             if (shouldFilterRow(operationId, date)) {
-              rows[i].style.display = "none";
+              rows[i].style.display = 'none';
             } else {
-              rows[i].style.display = "";
+              rows[i].style.display = '';
             }
           }
         }
@@ -97,22 +97,22 @@
         const currentDate = Date.now();
         const rowDate = date.valueOf();
         switch (operationId) {
-          case "filter-1-hour":
+          case 'filter-1-hour':
             shouldFilter = rowDate < currentDate - 3600000; // number of ms in one hour
             break;
-          case "filter-24-hour":
+          case 'filter-24-hour':
             shouldFilter = rowDate < currentDate - 86400000; // number of ms in 24 hr
             break;
-          case "filter-48-hour":
+          case 'filter-48-hour':
             shouldFilter = rowDate < currentDate - 172800000; // number of ms in 48 hr
             break;
-          case "filter-7-days":
+          case 'filter-7-days':
             shouldFilter = rowDate < currentDate - 604800000; // number of ms in 7 days
             break;
-          case "filter-30-days":
+          case 'filter-30-days':
             shouldFilter = rowDate < currentDate - 2592000000; // number of ms in 30 days
             break;
-          case "filter-none":
+          case 'filter-none':
             shouldFilter = false;
             break;
         }
@@ -124,18 +124,18 @@
       function sortTable(operationId) {
         let table, rows, switching, i, x, y, shouldSwitch, columnIndex;
         const columnToIndexMap = {
-          "sort-by-time": 0,
-          "sort-by-users": 1,
-          "sort-by-status": 4,
+          'sort-by-time': 0,
+          'sort-by-users': 1,
+          'sort-by-status': 4,
         };
 
         const selectedElement = document.getElementById(operationId);
-        document.getElementById("current-sort-by").textContent =
+        document.getElementById('current-sort-by').textContent =
           selectedElement.innerText;
-        selectedElement.classList.add("is-active");
+        selectedElement.classList.add('is-active');
         currentSortById = operationId;
 
-        table = document.getElementById("table-body");
+        table = document.getElementById('table-body');
         columnIndex = columnToIndexMap[operationId];
         switching = true;
         // Make a loop that will continue until no switching has been done
@@ -146,8 +146,8 @@
           for (i = 0; i < rows.length - 1; i++) {
             shouldSwitch = false;
             // Get the two elements you want to compare, one from current row and one from the next
-            x = rows[i].getElementsByTagName("TD")[columnIndex];
-            y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+            x = rows[i].getElementsByTagName('TD')[columnIndex];
+            y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
             // Check if the two rows should switch place:
             if (shouldSwitchRows(operationId, x, y)) {
               shouldSwitch = true;
@@ -164,14 +164,14 @@
 
       function shouldSwitchRows(operationId, x, y) {
         if (
-          operationId === "sort-by-users" ||
-          operationId === "sort-by-status"
+          operationId === 'sort-by-users' ||
+          operationId === 'sort-by-status'
         ) {
           if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
             return true;
           }
         }
-        if (operationId === "sort-by-time") {
+        if (operationId === 'sort-by-time') {
           // format from server is 2021-05-31 12:45:58.929, timezone unknown
           // TODO: display in format Fri, 16 May 2015 05:40:02 GMT
           let regex =
@@ -188,7 +188,7 @@
             xMatch[7]
           );
           if (yMatch == null) {
-            console.log("help");
+            console.log('help');
           }
           let yDate = new Date(
             yMatch[1],
@@ -219,241 +219,241 @@
       function populateTable() {
         // TODO: Get this data from the server and convert into a user-friendly format
         smsReports = {
-          CompanyName: "Comapny ABC",
-          "SMS Report": [
+          CompanyName: 'Comapny ABC',
+          'SMS Report': [
             {
-              "Report SMS phoneNumber": "+15877031458",
-              "Report SMS_ID": "SM5729a4c8fa08431abd0a0ef6554c2128",
-              "Report userID": "a.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-10-21 21:27:06.193",
+              'Report SMS phoneNumber': '+15877031458',
+              'Report SMS_ID': 'SM5729a4c8fa08431abd0a0ef6554c2128',
+              'Report userID': 'a.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-10-21 21:27:06.193',
             },
             {
-              "Report SMS phoneNumber": "+115877031458",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "a.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-10-21 21:27:05.818",
+              'Report SMS phoneNumber': '+115877031458',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'a.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-10-21 21:27:05.818',
             },
             {
-              "Report SMS phoneNumber": "+115877031458",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "a.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-10-21 21:27:05.802",
+              'Report SMS phoneNumber': '+115877031458',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'a.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-10-21 21:27:05.802',
             },
             {
-              "Report SMS phoneNumber": "+16477074135",
-              "Report SMS_ID": "SMaff710815fa24e698c9ef280afad93de",
-              "Report userID": "nam.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-10-17 14:52:04.367",
+              'Report SMS phoneNumber': '+16477074135',
+              'Report SMS_ID': 'SMaff710815fa24e698c9ef280afad93de',
+              'Report userID': 'nam.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-10-17 14:52:04.367',
             },
             {
-              "Report SMS phoneNumber": "+16474702520",
-              "Report SMS_ID": "SM56e36cc9ffc2491992b41adc234c5eb3",
-              "Report userID": "nam.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-10-17 14:52:04.18",
+              'Report SMS phoneNumber': '+16474702520',
+              'Report SMS_ID': 'SM56e36cc9ffc2491992b41adc234c5eb3',
+              'Report userID': 'nam.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-10-17 14:52:04.18',
             },
             {
-              "Report SMS phoneNumber": "+15877031458",
-              "Report SMS_ID": "SMe9f9d92f64d74c68a1b8734b1a96f636",
-              "Report userID": "nam.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-10-17 14:52:04.008",
+              'Report SMS phoneNumber': '+15877031458',
+              'Report SMS_ID': 'SMe9f9d92f64d74c68a1b8734b1a96f636',
+              'Report userID': 'nam.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-10-17 14:52:04.008',
             },
             {
-              "Report SMS phoneNumber": "+15877031458",
-              "Report SMS_ID": "SM55c3e0e5ed044fbaa3652cdd232f4147",
-              "Report userID": "l.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-10-11 22:26:07.964",
+              'Report SMS phoneNumber': '+15877031458',
+              'Report SMS_ID': 'SM55c3e0e5ed044fbaa3652cdd232f4147',
+              'Report userID': 'l.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-10-11 22:26:07.964',
             },
             {
-              "Report SMS phoneNumber": "+115877031458",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "l.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-10-11 22:26:06.136",
+              'Report SMS phoneNumber': '+115877031458',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'l.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-10-11 22:26:06.136',
             },
             {
-              "Report SMS phoneNumber": "+115877031458",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "l.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-10-11 22:26:06.026",
+              'Report SMS phoneNumber': '+115877031458',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'l.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-10-11 22:26:06.026',
             },
             {
-              "Report SMS phoneNumber": "+18322176851",
-              "Report SMS_ID": "SM7cdd1259df514c739e5d04335711f9a0",
-              "Report userID": "tin.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-09-16 14:03:31.425",
+              'Report SMS phoneNumber': '+18322176851',
+              'Report SMS_ID': 'SM7cdd1259df514c739e5d04335711f9a0',
+              'Report userID': 'tin.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-09-16 14:03:31.425',
             },
             {
-              "Report SMS phoneNumber": "+158770314587",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-16 14:01:19.566",
+              'Report SMS phoneNumber': '+158770314587',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-16 14:01:19.566',
             },
             {
-              "Report SMS phoneNumber": "+15877031458",
-              "Report SMS_ID": "SM36af5f06d8e54ac8a6a792e263679bc6",
-              "Report userID": "tin.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-09-16 14:00:36.832",
+              'Report SMS phoneNumber': '+15877031458',
+              'Report SMS_ID': 'SM36af5f06d8e54ac8a6a792e263679bc6',
+              'Report userID': 'tin.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-09-16 14:00:36.832',
             },
             {
-              "Report SMS phoneNumber": "+1Nam.",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-15 18:10:22.273",
+              'Report SMS phoneNumber': '+1Nam.',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-15 18:10:22.273',
             },
             {
-              "Report SMS phoneNumber": "+1anh",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-15 18:10:22.257",
+              'Report SMS phoneNumber': '+1anh',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-15 18:10:22.257',
             },
             {
-              "Report SMS phoneNumber": "+1Hi",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-15 18:10:22.226",
+              'Report SMS phoneNumber': '+1Hi',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-15 18:10:22.226',
             },
             {
-              "Report SMS phoneNumber": "+1Nam.",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-15 18:09:55.601",
+              'Report SMS phoneNumber': '+1Nam.',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-15 18:09:55.601',
             },
             {
-              "Report SMS phoneNumber": "+1anh",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-15 18:09:55.585",
+              'Report SMS phoneNumber': '+1anh',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-15 18:09:55.585',
             },
             {
-              "Report SMS phoneNumber": "+1Hi",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-15 18:09:55.554",
+              'Report SMS phoneNumber': '+1Hi',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-15 18:09:55.554',
             },
             {
-              "Report SMS phoneNumber": "+1v&#7845;u.",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ":
+              'Report SMS phoneNumber': '+1v&#7845;u.',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ':
                 "Exception: The 'To' number +17845 is not a valid phone number.",
-              "Report datetime test": "2021-09-15 18:07:46.678",
+              'Report datetime test': '2021-09-15 18:07:46.678',
             },
             {
-              "Report SMS phoneNumber": "+1em",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-15 18:07:46.194",
+              'Report SMS phoneNumber': '+1em',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-15 18:07:46.194',
             },
             {
-              "Report SMS phoneNumber": "+1yêu",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-15 18:07:46.194",
+              'Report SMS phoneNumber': '+1yêu',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-15 18:07:46.194',
             },
             {
-              "Report SMS phoneNumber": "+1Hi",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-15 18:07:46.147",
+              'Report SMS phoneNumber': '+1Hi',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-15 18:07:46.147',
             },
             {
-              "Report SMS phoneNumber": "+18328122195",
-              "Report SMS_ID": "SMe10cd9b4f4aa411c8a4f1319607dc271",
-              "Report userID": "nam.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-09-14 18:27:29.86",
+              'Report SMS phoneNumber': '+18328122195',
+              'Report SMS_ID': 'SMe10cd9b4f4aa411c8a4f1319607dc271',
+              'Report userID': 'nam.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-09-14 18:27:29.86',
             },
             {
-              "Report SMS phoneNumber": "+118328122195",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "nam.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-14 18:27:16.422",
+              'Report SMS phoneNumber': '+118328122195',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'nam.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-14 18:27:16.422',
             },
             {
-              "Report SMS phoneNumber": "+1anh",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-14 18:11:19.548",
+              'Report SMS phoneNumber': '+1anh',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-14 18:11:19.548',
             },
             {
-              "Report SMS phoneNumber": "+1nam",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-14 18:11:19.548",
+              'Report SMS phoneNumber': '+1nam',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-14 18:11:19.548',
             },
             {
-              "Report SMS phoneNumber": "+1hi",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-14 18:11:19.501",
+              'Report SMS phoneNumber': '+1hi',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-14 18:11:19.501',
             },
             {
-              "Report SMS phoneNumber": "+1hi",
-              "Report SMS_ID": "NO message SID",
-              "Report userID": "tin.nguyen@nncs",
-              "report Status ": "Invalid phone number.",
-              "Report datetime test": "2021-09-12 15:38:43.415",
+              'Report SMS phoneNumber': '+1hi',
+              'Report SMS_ID': 'NO message SID',
+              'Report userID': 'tin.nguyen@nncs',
+              'report Status ': 'Invalid phone number.',
+              'Report datetime test': '2021-09-12 15:38:43.415',
             },
             {
-              "Report SMS phoneNumber": "+18322890056",
-              "Report SMS_ID": "SM6f0bcb26dd754ceab2b3abbe1745942c",
-              "Report userID": "Tin.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-09-07 15:26:47.28",
+              'Report SMS phoneNumber': '+18322890056',
+              'Report SMS_ID': 'SM6f0bcb26dd754ceab2b3abbe1745942c',
+              'Report userID': 'Tin.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-09-07 15:26:47.28',
             },
             {
-              "Report SMS phoneNumber": "+15877031458",
-              "Report SMS_ID": "SMe36e96c1c7c54fd09442c3037b064088",
-              "Report userID": "nam.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-09-06 14:13:46.074",
+              'Report SMS phoneNumber': '+15877031458',
+              'Report SMS_ID': 'SMe36e96c1c7c54fd09442c3037b064088',
+              'Report userID': 'nam.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-09-06 14:13:46.074',
             },
             {
-              "Report SMS phoneNumber": "+15877031458",
-              "Report SMS_ID": "SM79ddd8ff4dfd49f188fe4320dacc80b3",
-              "Report userID": "nam.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-09-06 14:13:45.824",
+              'Report SMS phoneNumber': '+15877031458',
+              'Report SMS_ID': 'SM79ddd8ff4dfd49f188fe4320dacc80b3',
+              'Report userID': 'nam.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-09-06 14:13:45.824',
             },
             {
-              "Report SMS phoneNumber": "+15877031458",
-              "Report SMS_ID": "SMaaf7fcdc13394b2d98e64bbdfd8d2018",
-              "Report userID": "nam.nguyen@nncs",
-              "report Status ": "ok",
-              "Report datetime test": "2021-09-06 13:56:56.746",
+              'Report SMS phoneNumber': '+15877031458',
+              'Report SMS_ID': 'SMaaf7fcdc13394b2d98e64bbdfd8d2018',
+              'Report userID': 'nam.nguyen@nncs',
+              'report Status ': 'ok',
+              'Report datetime test': '2021-09-06 13:56:56.746',
             },
           ],
-          userId: "nnguyen@nncs",
+          userId: 'nnguyen@nncs',
         };
 
-        const data = smsReports["SMS Report"];
+        const data = smsReports['SMS Report'];
 
         clearTable();
-        const tableBody = document.getElementById("table-body");
+        const tableBody = document.getElementById('table-body');
         let rowNum = 0;
         data.forEach((x) => {
           let row = tableBody.insertRow(rowNum);
@@ -467,24 +467,24 @@
           for (const property in x) {
             const value = x[property];
 
-            if (property === "Report datetime test") {
+            if (property === 'Report datetime test') {
               timeCell.innerHTML = value;
             }
-            if (property === "Report userID") {
+            if (property === 'Report userID') {
               userIdCell.innerHTML = value;
             }
-            if (property === "Report SMS phoneNumber") {
+            if (property === 'Report SMS phoneNumber') {
               phoneNumberCell.innerHTML = value;
             }
-            if (property === "Report SMS_ID") {
+            if (property === 'Report SMS_ID') {
               idCell.innerHTML = value;
             }
-            if (property === "report Status ") {
+            if (property === 'report Status ') {
               statusCell.innerHTML = value;
-              if (value === "ok") {
-                statusCell.style.color = "green";
+              if (value === 'ok') {
+                statusCell.style.color = 'green';
               } else {
-                statusCell.style.color = "red";
+                statusCell.style.color = 'red';
               }
             }
           }
@@ -496,16 +496,16 @@
       }
 
       function clearTable() {
-        const tableBody = document.getElementById("table-body");
+        const tableBody = document.getElementById('table-body');
         while (tableBody.firstChild) {
           tableBody.firstChild.remove();
         }
       }
 
       // Close all dropdowns when clicking elsewhere on the page
-      document.addEventListener("click", (event) => {
-        const sortDropdown = document.getElementById("sort-button");
-        const filterDropdown = document.getElementById("filter-button");
+      document.addEventListener('click', (event) => {
+        const sortDropdown = document.getElementById('sort-button');
+        const filterDropdown = document.getElementById('filter-button');
         const isClickInside =
           sortDropdown.contains(event.target) ||
           filterDropdown.contains(event.target);
@@ -515,10 +515,10 @@
         }
       });
 
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener('DOMContentLoaded', () => {
         // Get all "navbar-burger" elements
         const $navbarBurgers = Array.prototype.slice.call(
-          document.querySelectorAll(".navbar-burger"),
+          document.querySelectorAll('.navbar-burger'),
           0
         );
 
@@ -526,14 +526,14 @@
         if ($navbarBurgers.length > 0) {
           // Add a click event on each of them
           $navbarBurgers.forEach((el) => {
-            el.addEventListener("click", () => {
+            el.addEventListener('click', () => {
               // Get the target from the "data-target" attribute
               const target = el.dataset.target;
               const $target = document.getElementById(target);
 
               // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-              el.classList.toggle("is-active");
-              $target.classList.toggle("is-active");
+              el.classList.toggle('is-active');
+              $target.classList.toggle('is-active');
             });
           });
         }
@@ -568,7 +568,12 @@
 
       <div id="navigation-bar" class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item"> Home </a>
+          <a
+            class="navbar-item"
+            href="https://www.sorontil.com:8443/cydoniaWeb/authenticated/bisPatientManagement.do"
+          >
+            Home
+          </a>
 
           <a class="navbar-item is-active"> Reports </a>
         </div>
